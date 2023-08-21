@@ -1,4 +1,4 @@
-package com.esgi.pa;
+package com.esgi.pa.bootstrap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
