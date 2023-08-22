@@ -27,6 +27,7 @@ public class Cour {
     private String videoLink;
     @Column(columnDefinition = "text")
     private String contentCour;
+    private Boolean status;
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private Intern creator;

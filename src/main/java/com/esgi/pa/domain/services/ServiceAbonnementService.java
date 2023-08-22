@@ -22,13 +22,6 @@ public class ServiceAbonnementService {
 
   private final ServiceAbonnementRepository serviceAbonnementRepository;
 
-  /**
-   * Récupère un utilisateur par son id
-   *
-   * @param user  numérique de l'utilsateur
-   * @return utilisateur recherché
-   * @throws TechnicalNotFoundException si l'utilisateur n'est pas trouvé
-   */
   public ServiceAbonnement getById(Long id) throws TechnicalNotFoundException {
     return serviceAbonnementRepository
       .findById(id)
