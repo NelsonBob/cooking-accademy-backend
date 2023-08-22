@@ -2,8 +2,12 @@ package com.esgi.pa.api.dtos.requests.salle;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.Builder;
 
 @Builder
@@ -13,6 +17,6 @@ public record UpdateSalleRequest(
   @NotBlank(message = "Id is required") Long id,
   @NotBlank(message = "Description is required") String description,
   @NotBlank(message = "imgPath is required") String imgPath,
-  @NotBlank(message = "gallerie is required") String gallerie,
+  @NotNull(message = "gallerie is required") List<GallerieRequest> gallerie,
   @NotBlank(message = "status is required") Boolean status
 ) {}

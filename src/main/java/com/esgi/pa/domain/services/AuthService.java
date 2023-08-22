@@ -16,6 +16,7 @@ import com.esgi.pa.domain.enums.RoleEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.security.JwtService;
+import com.esgi.pa.domain.services.util.UtilService;
 import com.esgi.pa.server.repositories.ClientRepository;
 import com.esgi.pa.server.repositories.InternRepository;
 import com.esgi.pa.server.repositories.UsersRepository;

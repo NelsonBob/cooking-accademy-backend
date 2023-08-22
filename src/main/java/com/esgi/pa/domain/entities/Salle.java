@@ -1,6 +1,13 @@
 package com.esgi.pa.domain.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +34,7 @@ public class Salle {
 
   private String imgPath;
 
-  @Column(columnDefinition = "json")
+  @Column(columnDefinition = "text")
   private String gallerie;
 
   @ManyToOne

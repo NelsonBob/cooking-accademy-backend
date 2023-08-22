@@ -2,12 +2,11 @@ package com.esgi.pa.api.dtos.requests.optionAbonnement;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-import java.util.List;
-
-import javax.validation.constraints.NotBlank;
-
 import com.esgi.pa.api.dtos.requests.optionServiceAbonnement.CreateOptionServiceAbonnementRequest;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Builder;
 
@@ -20,9 +19,7 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record CreateOptionAbonnementRequest(
-    @NotBlank(message = "Name is required")
-    String name,
-    List<CreateOptionServiceAbonnementRequest> optionServiceAbonnementRequests
-) {
-
-}
+  @NotBlank(message = "Name is required") String name,
+  @NotNull(message = "optionServiceAbonnementRequests is required")
+  List<CreateOptionServiceAbonnementRequest> optionServiceAbonnementRequests
+) {}

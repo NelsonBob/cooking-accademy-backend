@@ -1,11 +1,10 @@
 package com.esgi.pa.api.dtos.requests.serviceAbonnement;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import lombok.Builder;
-
-import javax.validation.constraints.NotBlank;
-
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import javax.validation.constraints.NotBlank;
+import lombok.Builder;
 
 /**
  * DTO de requête de création de compte
@@ -18,13 +17,9 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record UpdateServiceAbonnementRequest(
-    @NotBlank(message = "Long is required")
-    Long id,
-    @NotBlank(message = "Name is required")
-    String name,
-    String description,
-    String imgPath,
-    Boolean status
-) {
-
-}
+  @NotBlank(message = "Long is required") Long id,
+  @NotBlank(message = "Name is required") String name,
+  String description,
+  @NotBlank(message = "imgPath is required") String imgPath,
+  Boolean status
+) {}

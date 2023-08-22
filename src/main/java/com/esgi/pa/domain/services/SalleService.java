@@ -1,17 +1,17 @@
 package com.esgi.pa.domain.services;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
+import com.esgi.pa.api.dtos.requests.salle.GallerieRequest;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Salle;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.SalleRepository;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -35,9 +35,12 @@ public class SalleService {
     String name,
     String description,
     String imgPath,
-    String gallerie
-  ) throws TechnicalFoundException {
+    List<GallerieRequest> gallerie
+  ) throws TechnicalFoundException, JsonProcessingException {
     if (salleRepository.findByName(name).isEmpty()) {
+      System.out.print("tttttttttttttttttttttttttttttttttttt");
+      System.out.print(gallerie);
+
       Salle saveAb = salleRepository.save(
         Salle
           .builder()
@@ -46,7 +49,7 @@ public class SalleService {
           .creator(creator)
           .status(Boolean.TRUE)
           .imgPath(imgPath)
-          .gallerie(gallerie)
+          .gallerie(galleriesList(gallerie).toString())
           .build()
       );
       return saveAb;
@@ -62,9 +65,9 @@ public class SalleService {
     String name,
     String description,
     String imgPath,
-    String gallerie,
+    List<GallerieRequest> gallerie,
     Boolean status
-  ) throws TechnicalFoundException {
+  ) throws TechnicalFoundException, JsonProcessingException {
     if (
       salleRepository.findByName(name).isEmpty() ||
       salleRepository.findByName(name).isPresent() &&
@@ -74,7 +77,8 @@ public class SalleService {
       salle.setDescription(description);
       salle.setStatus(status);
       salle.setImgPath(imgPath);
-      salle.setGallerie(gallerie);
+
+      salle.setGallerie(galleriesList(gallerie).toString());
       Salle saveAb = salleRepository.save(salle);
       return saveAb;
     } else {
@@ -94,5 +98,13 @@ public class SalleService {
 
   public List<Salle> findByStatus() {
     return salleRepository.findByStatus(Boolean.TRUE);
+  }
+
+  public List<String> galleriesList(List<GallerieRequest> gallerie) {
+    List<String> gal = new ArrayList<>();
+    gallerie.forEach(el -> {
+      gal.add(el.fileName().toString());
+    });
+    return gal;
   }
 }

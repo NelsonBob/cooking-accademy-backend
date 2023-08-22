@@ -31,6 +31,7 @@ import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.SalleService;
 import com.esgi.pa.domain.services.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -80,9 +81,11 @@ public class SalleResource {
   public GetSalleResponse create(
     @Valid @RequestBody CreateSalleRequest request,
     @PathVariable Long id
-  ) throws TechnicalFoundException, TechnicalNotFoundException {
+  )
+    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
+
     Salle salle = salleService.create(
       intern,
       request.name(),
@@ -98,7 +101,8 @@ public class SalleResource {
   public GetSalleResponse update(
     @Valid @RequestBody UpdateSalleRequest request,
     @PathVariable Long id
-  ) throws TechnicalFoundException, TechnicalNotFoundException {
+  )
+    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
     Salle salle1 = salleService.getById(request.id());

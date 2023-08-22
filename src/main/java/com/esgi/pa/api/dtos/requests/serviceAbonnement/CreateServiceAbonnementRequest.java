@@ -2,10 +2,8 @@ package com.esgi.pa.api.dtos.requests.serviceAbonnement;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-import javax.validation.constraints.NotBlank;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
+import javax.validation.constraints.NotBlank;
 import lombok.Builder;
 
 /**
@@ -17,10 +15,7 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record CreateServiceAbonnementRequest(
-    @NotBlank(message = "Name is required")
-    String name,
-    String description,
-    String imgPath
-) {
-
-}
+  @NotBlank(message = "Name is required") String name,
+  String description,
+  @NotBlank(message = "imgPath is required") String imgPath
+) {}

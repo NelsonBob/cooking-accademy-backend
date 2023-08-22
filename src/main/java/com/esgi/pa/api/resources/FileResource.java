@@ -1,12 +1,13 @@
 package com.esgi.pa.api.resources;
 
-import com.esgi.pa.domain.services.UtilService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.esgi.pa.domain.services.util.UtilService;
 
 import java.io.IOException;
 import java.nio.file.Files;
