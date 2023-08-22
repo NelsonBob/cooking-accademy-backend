@@ -20,5 +20,5 @@ public record UpdateOptionServiceAbonnementRequest(
   @NotBlank(message = "Icon is required") Boolean icon,
   @NotBlank(message = "Description is required") Boolean description,
   @NotBlank(message = "ValueIcon is required") String valueicon,
-  @NotBlank(message = "Description is required") String descriptionvalue
+  @NotBlank(message = "DescriptionValue is required") String descriptionvalue
 ) {}

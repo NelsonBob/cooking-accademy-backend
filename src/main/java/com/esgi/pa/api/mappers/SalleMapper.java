@@ -1,0 +1,30 @@
+package com.esgi.pa.api.mappers;
+
+import java.util.List;
+
+import com.esgi.pa.api.dtos.responses.salle.GetSalleResponse;
+import com.esgi.pa.domain.entities.Salle;
+
+/**
+ * Contient les méthodes pour mapper les entités utilisateur du domain vers des dtos
+ */
+public interface SalleMapper {
+  static GetSalleResponse toGetSalleResponse(Salle salle) {
+    return new GetSalleResponse(
+      salle.getId(),
+      salle.getName(),
+      salle.getDescription(),
+      salle.getImgPath(),
+      salle.getGallerie(),
+      InternMapper.toGetInternResponse(salle.getCreator())
+    );
+  }
+
+  static List<GetSalleResponse> toGetSalleResponse(List<Salle> entities) {
+    return entities
+      .stream()
+      .map(SalleMapper::toGetSalleResponse)
+      .distinct()
+      .toList();
+  }
+}

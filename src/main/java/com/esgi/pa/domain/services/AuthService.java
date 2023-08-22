@@ -1,16 +1,16 @@
 package com.esgi.pa.domain.services;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
 import java.util.Arrays;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.esgi.pa.domain.entities.Client;
+import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.RoleEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
@@ -106,7 +106,7 @@ public class AuthService {
       .findByEmail(email)
       .orElseThrow(() ->
         new TechnicalNotFoundException(
-          NOT_FOUND,
+          HttpStatus.NOT_FOUND,
           "Username not found with email : " + email
         )
       );
@@ -118,7 +118,7 @@ public class AuthService {
         .findByUsers(users)
         .orElseThrow(() ->
           new TechnicalNotFoundException(
-            NOT_FOUND,
+            HttpStatus.NOT_FOUND,
             "Client not found with email : " + email
           )
         );
@@ -136,14 +136,14 @@ public class AuthService {
         users
       );
     } else {
-      // Intern intern = internRepository
-      //   .findByUsers(users)
-      //   .orElseThrow(() ->
-      //     new TechnicalNotFoundException(
-      //       NOT_FOUND,
-      //       "Intern not found with email : " + email
-      //     )
-      //   );
+      Intern intern = internRepository
+        .findByUsers(users)
+        .orElseThrow(() ->
+          new TechnicalNotFoundException(
+            HttpStatus.NOT_FOUND,
+            "Intern not found with email : " + email
+          )
+        );
       return jwtService.generateToken(
         Map.of(
           "id",
@@ -151,9 +151,9 @@ public class AuthService {
           "name",
           users.getName(),
           "role",
-          users.getRole()
-          // "fonction",
-          // intern.getFonction()
+          users.getRole(),
+          "fonction",
+          intern.getFonction()
         ),
         users
       );
