@@ -3,18 +3,18 @@ package com.esgi.pa.api.resources;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-import com.esgi.pa.api.dtos.requests.cour.CreateCourRequest;
-import com.esgi.pa.api.dtos.requests.cour.GetByIdCourRequest;
-import com.esgi.pa.api.dtos.requests.cour.UpdateCourRequest;
-import com.esgi.pa.api.dtos.responses.cour.GetCourResponse;
-import com.esgi.pa.api.mappers.CourMapper;
-import com.esgi.pa.domain.entities.Cour;
+import com.esgi.pa.api.dtos.requests.optionAbonnement.CreateOptionAbonnementRequest;
+import com.esgi.pa.api.dtos.requests.optionAbonnement.GetByIdOptionAbonnementRequest;
+import com.esgi.pa.api.dtos.requests.optionAbonnement.UpdateOptionAbonnementRequest;
+import com.esgi.pa.api.dtos.responses.optionAbonnement.GetOptionAbonnementResponse;
+import com.esgi.pa.api.mappers.OptionAbonnementMapper;
 import com.esgi.pa.domain.entities.Intern;
+import com.esgi.pa.domain.entities.OptionAbonnement;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.domain.services.CourService;
 import com.esgi.pa.domain.services.InternService;
+import com.esgi.pa.domain.services.OptionAbonnementService;
 import com.esgi.pa.domain.services.UserService;
 import io.swagger.annotations.Api;
 import java.util.List;
@@ -37,89 +37,99 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/cour")
-@Api(tags = "Cour API")
-public class CourResource {
+@RequestMapping("/option-abonnement")
+@Api(tags = "OptionAbonnement API")
+public class OptionAbonnementResource {
 
   private final UserService userService;
   private final InternService internService;
-  private final CourService courService;
+  private final OptionAbonnementService optionAbonnementService;
 
   @GetMapping("{id}")
-  public List<GetCourResponse> getAllCours(@PathVariable Long id)
-    throws TechnicalNotFoundException {
-    Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return CourMapper.toGetCourResponse(courService.findAll());
-  }
-
-  @GetMapping("user/{id}")
-  public GetCourResponse getCourById(
-    @PathVariable Long id,
-    @Valid @RequestBody GetByIdCourRequest request
+  public List<GetOptionAbonnementResponse> getAllOptionAbonnements(
+    @PathVariable Long id
   ) throws TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
-    return CourMapper.toGetCourResponse(courService.getById(request.id()));
+    return OptionAbonnementMapper.toGetOptionAbonnementResponse(
+      optionAbonnementService.findAll()
+    );
+  }
+
+  @GetMapping("user/{id}")
+  public GetOptionAbonnementResponse getOptionAbonnementById(
+    @PathVariable Long id,
+    @Valid @RequestBody GetByIdOptionAbonnementRequest request
+  ) throws TechnicalNotFoundException {
+    Users users = userService.getById(id);
+    Intern intern = internService.getById(users);
+    return OptionAbonnementMapper.toGetOptionAbonnementResponse(
+      optionAbonnementService.getById(request.id())
+    );
   }
 
   @GetMapping("actif/{id}")
-  public List<GetCourResponse> getCoursActif(@PathVariable Long id)
-    throws TechnicalNotFoundException {
+  public List<GetOptionAbonnementResponse> getOptionAbonnementsActif(
+    @PathVariable Long id
+  ) throws TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
-    return CourMapper.toGetCourResponse(courService.findByStatus());
+    return OptionAbonnementMapper.toGetOptionAbonnementResponse(
+      optionAbonnementService.findByStatus()
+    );
   }
 
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
-  public GetCourResponse create(
-    @Valid @RequestBody CreateCourRequest request,
+  public GetOptionAbonnementResponse create(
+    @Valid @RequestBody CreateOptionAbonnementRequest request,
     @PathVariable Long id
   ) throws TechnicalFoundException, TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
-    Cour cour = courService.create(
+    OptionAbonnement optionAbonnement = optionAbonnementService.create(
       intern,
       request.name(),
-      request.description(),
-      request.imgPath(),
-      request.videoLink(),
-      request.contentCour()
+      request.optionServiceAbonnementRequests()
     );
-    return CourMapper.toGetCourResponse(cour);
+    return OptionAbonnementMapper.toGetOptionAbonnementResponse(
+      optionAbonnement
+    );
   }
 
   @PutMapping(value = "{id}")
   @ResponseStatus(OK)
-  public GetCourResponse update(
-    @Valid @RequestBody UpdateCourRequest request,
+  public GetOptionAbonnementResponse update(
+    @Valid @RequestBody UpdateOptionAbonnementRequest request,
     @PathVariable Long id
   ) throws TechnicalFoundException, TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
-    Cour cour1 = courService.getById(request.id());
-    Cour cour = courService.update(
-      cour1,
-      request.name(),
-      request.description(),
-      request.imgPath(),
-      request.videoLink(),
-      request.contentCour(),
-      request.status()
+    OptionAbonnement optionAbonnement1 = optionAbonnementService.getById(
+      request.id()
     );
-    return CourMapper.toGetCourResponse(cour);
+    OptionAbonnement optionAbonnement = optionAbonnementService.update(
+      optionAbonnement1,
+      request.name(),
+      request.status(),
+      request.optionServiceAbonnementRequests()
+    );
+    return OptionAbonnementMapper.toGetOptionAbonnementResponse(
+      optionAbonnement
+    );
   }
 
   @DeleteMapping(value = "{id}")
   @ResponseStatus(OK)
   public void delete(
-    @Valid @RequestBody GetByIdCourRequest request,
+    @Valid @RequestBody GetByIdOptionAbonnementRequest request,
     @PathVariable Long id
   ) throws TechnicalNotFoundException {
     Users users = userService.getById(id);
-    internService.getById(users);
-    Cour cour = courService.getById(request.id());
-    courService.delete(cour);
+    Intern intern = internService.getById(users);
+    OptionAbonnement optionAbonnement = optionAbonnementService.getById(
+      request.id()
+    );
+    optionAbonnementService.delete(optionAbonnement);
   }
 }

@@ -1,13 +1,13 @@
 package com.esgi.pa.api.dtos.requests.user;
 
-import com.esgi.pa.domain.enums.RoleEnum;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import lombok.Builder;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import com.esgi.pa.domain.enums.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import lombok.Builder;
 
 /**
  * DTO de requête de création de compte
