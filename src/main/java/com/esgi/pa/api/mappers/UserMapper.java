@@ -1,43 +1,26 @@
 package com.esgi.pa.api.mappers;
 
+import java.util.List;
+
 import com.esgi.pa.api.dtos.responses.auth.AuthenticationUserResponse;
 import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
-import com.esgi.pa.api.dtos.responses.user.NoFriendsUserResponse;
-import com.esgi.pa.domain.entities.User;
-
-import java.util.List;
+import com.esgi.pa.domain.entities.Users;
 
 /**
  * Contient les méthodes pour mapper les entités utilisateur du domain vers des dtos
  */
 public interface UserMapper {
 
-    static GetUserResponse toGetUserResponse(User user) {
+    static GetUserResponse toGetUserResponse(Users users) {
         return new GetUserResponse(
-            user.getId(),
-            user.getName(),
-            user.getEmail(),
-            user.getRole());
+                users.getId(),
+                users.getName(),
+                users.getEmail(),
+                users.getRole());
     }
-
-    static List<GetUserResponse> toGetUserResponse(List<User> entities) {
+    static List<GetUserResponse> toGetUserResponse(List<Users> entities) {
         return entities.stream()
             .map(UserMapper::toGetUserResponse)
-            .distinct()
-            .toList();
-    }
-
-    static NoFriendsUserResponse toNoFriendsUserResponse(User user) {
-        return new NoFriendsUserResponse(
-            user.getId(),
-            user.getName(),
-            user.getEmail(),
-            user.getRole());
-    }
-
-    static List<NoFriendsUserResponse> toNoFriendsUserResponse(List<User> entities) {
-        return entities.stream()
-            .map(UserMapper::toNoFriendsUserResponse)
             .distinct()
             .toList();
     }

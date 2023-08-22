@@ -1,4 +1,4 @@
-package com.esgi.pa.api.dtos.requests.auth;
+package com.esgi.pa.api.dtos.requests.intern;
 
 import com.esgi.pa.domain.enums.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -18,11 +18,11 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
  * @param email    email de l'utilisateur
  * @param password mot de passe de l'utilisateur
  * @param role     role de l'utilisateur
- * @param adress   adress de l'utilisateur
+ * @param fonction     role de l'utilisateur
  */
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
-public record CreateUserRequest(
+public record CreateInternRequest(
     @NotBlank(message = "Name is required")
     String name,
     @NotBlank(message = "Email is required")
@@ -31,7 +31,10 @@ public record CreateUserRequest(
     @NotBlank(message = "Password is required")
     @Size(min = 5, message = "Password must be at least 5 characters long")
     String password,
-    String adress
+    @NotNull(message = "Role is required")
+    RoleEnum role,
+    @NotBlank(message = "Fonction is required")
+    String fonction
 ) {
 
 }

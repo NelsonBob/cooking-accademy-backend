@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import javax.validation.Valid;
 
+import com.esgi.pa.domain.enums.RoleEnum;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,7 +70,8 @@ public class AuthResource {
         request.name(),
         request.email(),
         request.password(),
-        request.role()
+        RoleEnum.Client,
+        request.adress()
       )
     );
   }

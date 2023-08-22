@@ -1,17 +1,12 @@
 package com.esgi.pa.domain.entities;
 
 import com.esgi.pa.domain.enums.RoleEnum;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,26 +24,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS")
-@JsonIgnoreProperties("participatingLobbies")
-public class User implements UserDetails {
-
+public class Users implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-
   @Column(unique = true)
   private String name;
-
   @Column(unique = true)
   private String email;
-
   private String password;
-
   @With
   @Enumerated(EnumType.STRING)
   private RoleEnum role;
-
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.name()));
