@@ -12,5 +12,5 @@ import com.esgi.pa.domain.entities.Users;
  */
 public interface InternRepository extends JpaRepository<Intern, Long> {
     Optional<Intern> findByUsers(Users users);
-
+    boolean existsByUsers(Users users);
 }

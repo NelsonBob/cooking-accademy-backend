@@ -37,6 +37,6 @@ public class OptionServiceAbonnement {
 
   private Boolean icon;
   private Boolean description;
-  private String valueicon;
+  private Boolean isValueicon;
   private String descriptionvalue;
 }

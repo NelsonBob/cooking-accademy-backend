@@ -10,7 +10,7 @@ public record GetOptionServiceAbonnementResponse(
   Long id,
   Boolean icon,
   Boolean description,
-  String valueicon,
+  Boolean isValueicon,
   String descriptionvalue,
   GetServiceAbonnementResponse serviceAbonnement
 ) {}

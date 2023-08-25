@@ -3,10 +3,25 @@ package com.esgi.pa.api.resources;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+import com.esgi.pa.api.dtos.requests.salle.CreateSalleRequest;
+import com.esgi.pa.api.dtos.requests.salle.GetByIdSalleRequest;
+import com.esgi.pa.api.dtos.requests.salle.UpdateSalleRequest;
+import com.esgi.pa.api.dtos.responses.salle.GetSalleResponse;
+import com.esgi.pa.api.mappers.SalleMapper;
+import com.esgi.pa.domain.entities.Intern;
+import com.esgi.pa.domain.entities.Salle;
+import com.esgi.pa.domain.entities.Users;
+import com.esgi.pa.domain.exceptions.NotAuthorizationRessourceException;
+import com.esgi.pa.domain.exceptions.TechnicalFoundException;
+import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
+import com.esgi.pa.domain.services.InternService;
+import com.esgi.pa.domain.services.SalleService;
+import com.esgi.pa.domain.services.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.annotations.Api;
 import java.util.List;
-
 import javax.validation.Valid;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,24 +32,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.esgi.pa.api.dtos.requests.salle.CreateSalleRequest;
-import com.esgi.pa.api.dtos.requests.salle.GetByIdSalleRequest;
-import com.esgi.pa.api.dtos.requests.salle.UpdateSalleRequest;
-import com.esgi.pa.api.dtos.responses.salle.GetSalleResponse;
-import com.esgi.pa.api.mappers.SalleMapper;
-import com.esgi.pa.domain.entities.Intern;
-import com.esgi.pa.domain.entities.Salle;
-import com.esgi.pa.domain.entities.Users;
-import com.esgi.pa.domain.exceptions.TechnicalFoundException;
-import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.domain.services.InternService;
-import com.esgi.pa.domain.services.SalleService;
-import com.esgi.pa.domain.services.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import io.swagger.annotations.Api;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Contient les routes des Service Abonnement
@@ -52,28 +49,40 @@ public class SalleResource {
 
   @GetMapping("{id}")
   public List<GetSalleResponse> getAllSalles(@PathVariable Long id)
-    throws TechnicalNotFoundException {
+    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return SalleMapper.toGetSalleResponse(salleService.findAll());
+    if (internService.doesExistForUsers(users)) {
+      return SalleMapper.toGetSalleResponse(salleService.findAll());
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
+    );
   }
 
   @GetMapping("user/{id}")
   public GetSalleResponse getSalleById(
     @PathVariable Long id,
     @Valid @RequestBody GetByIdSalleRequest request
-  ) throws TechnicalNotFoundException {
+  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return SalleMapper.toGetSalleResponse(salleService.getById(request.id()));
+    if (internService.doesExistForUsers(users)) {
+      return SalleMapper.toGetSalleResponse(salleService.getById(request.id()));
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
+    );
   }
 
   @GetMapping("actif/{id}")
   public List<GetSalleResponse> getSallesActif(@PathVariable Long id)
-    throws TechnicalNotFoundException {
+    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return SalleMapper.toGetSalleResponse(salleService.findByStatus());
+    if (internService.doesExistForUsers(users)) {
+      return SalleMapper.toGetSalleResponse(salleService.findByStatus());
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
+    );
   }
 
   @PostMapping(value = "{id}")
@@ -102,19 +111,23 @@ public class SalleResource {
     @Valid @RequestBody UpdateSalleRequest request,
     @PathVariable Long id
   )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException {
+    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    Salle salle1 = salleService.getById(request.id());
-    Salle salle = salleService.update(
-      salle1,
-      request.name(),
-      request.description(),
-      request.imgPath(),
-      request.gallerie(),
-      request.status()
+    if (internService.doesExistForUsers(users)) {
+      Salle salle1 = salleService.getById(request.id());
+      Salle salle = salleService.update(
+        salle1,
+        request.name(),
+        request.description(),
+        request.imgPath(),
+        request.gallerie(),
+        request.status()
+      );
+      return SalleMapper.toGetSalleResponse(salle);
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
     );
-    return SalleMapper.toGetSalleResponse(salle);
   }
 
   @DeleteMapping(value = "{id}")
@@ -122,10 +135,14 @@ public class SalleResource {
   public void delete(
     @Valid @RequestBody GetByIdSalleRequest request,
     @PathVariable Long id
-  ) throws TechnicalNotFoundException {
+  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    Salle salle = salleService.getById(request.id());
-    salleService.delete(salle);
+    if (internService.doesExistForUsers(users)) {
+      Salle salle = salleService.getById(request.id());
+      salleService.delete(salle);
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
+    );
   }
 }

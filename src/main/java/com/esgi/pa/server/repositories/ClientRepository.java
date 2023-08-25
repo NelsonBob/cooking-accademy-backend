@@ -12,4 +12,5 @@ import java.util.Optional;
  */
 public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findByUsers(Users users);
+    boolean existsByUsers(Users users);
 }

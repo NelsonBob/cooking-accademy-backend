@@ -63,7 +63,7 @@ public class OptionAbonnementService {
               .serviceAbonnement(serviceAbonnement)
               .icon(el.icon())
               .description(el.description())
-              .valueicon(el.valueicon())
+              .isValueicon(el.isValueicon())
               .descriptionvalue(el.descriptionvalue())
               .optionAbonnement(saveop)
               .build()
@@ -115,7 +115,7 @@ public class OptionAbonnementService {
           optionServiceAbonnement.setServiceAbonnement(serviceAbonnement);
           optionServiceAbonnement.setIcon(el.icon());
           optionServiceAbonnement.setDescription(el.description());
-          optionServiceAbonnement.setValueicon(el.valueicon());
+          optionServiceAbonnement.setIsValueicon(el.isValueicon());
           optionServiceAbonnement.setDescriptionvalue(el.descriptionvalue());
         } catch (TechnicalNotFoundException e) {
           e.printStackTrace();

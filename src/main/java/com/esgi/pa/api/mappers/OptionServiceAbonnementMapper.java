@@ -13,7 +13,7 @@ public interface OptionServiceAbonnementMapper {
       optionServiceAbonnement.getId(),
       optionServiceAbonnement.getIcon(),
       optionServiceAbonnement.getDescription(),
-      optionServiceAbonnement.getValueicon(),
+      optionServiceAbonnement.getIsValueicon(),
       optionServiceAbonnement.getDescriptionvalue(),
       ServiceAbonnementMapper.toGetServiceAbonnementResponse(
         optionServiceAbonnement.getServiceAbonnement()

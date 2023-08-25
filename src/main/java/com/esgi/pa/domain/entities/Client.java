@@ -25,9 +25,11 @@ public class Client {
     private String adress;
     private Integer nbVideoDay;
     private LocalDateTime videoDay;
+    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Users users;
+
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
     private List<Commande> commandes = new ArrayList<>();
 }

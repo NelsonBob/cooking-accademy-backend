@@ -18,6 +18,6 @@ public record CreateOptionServiceAbonnementRequest(
   @NotBlank(message = "Name is required") Long serviceAbonnement,
   @NotBlank(message = "Icon is required") Boolean icon,
   @NotBlank(message = "Description is required") Boolean description,
-  @NotBlank(message = "ValueIcon is required") String valueicon,
+  @NotBlank(message = "ValueIcon is required") Boolean isValueicon,
   @NotBlank(message = "DescriptionValue is required") String descriptionvalue
 ) {}

@@ -11,6 +11,7 @@ import com.esgi.pa.api.mappers.CourMapper;
 import com.esgi.pa.domain.entities.Cour;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Users;
+import com.esgi.pa.domain.exceptions.NotAuthorizationRessourceException;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.CourService;
@@ -47,28 +48,40 @@ public class CourResource {
 
   @GetMapping("{id}")
   public List<GetCourResponse> getAllCours(@PathVariable Long id)
-    throws TechnicalNotFoundException {
+    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return CourMapper.toGetCourResponse(courService.findAll());
+    if (internService.doesExistForUsers(users)) {
+      return CourMapper.toGetCourResponse(courService.findAll());
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
+    );
   }
 
   @GetMapping("user/{id}")
   public GetCourResponse getCourById(
     @PathVariable Long id,
     @Valid @RequestBody GetByIdCourRequest request
-  ) throws TechnicalNotFoundException {
+  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return CourMapper.toGetCourResponse(courService.getById(request.id()));
+    if (internService.doesExistForUsers(users)) {
+      return CourMapper.toGetCourResponse(courService.getById(request.id()));
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
+    );
   }
 
   @GetMapping("actif/{id}")
   public List<GetCourResponse> getCoursActif(@PathVariable Long id)
-    throws TechnicalNotFoundException {
+    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return CourMapper.toGetCourResponse(courService.findByStatus());
+    if (internService.doesExistForUsers(users)) {
+      return CourMapper.toGetCourResponse(courService.findByStatus());
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
+    );
   }
 
   @PostMapping(value = "{id}")
@@ -95,20 +108,25 @@ public class CourResource {
   public GetCourResponse update(
     @Valid @RequestBody UpdateCourRequest request,
     @PathVariable Long id
-  ) throws TechnicalFoundException, TechnicalNotFoundException {
+  )
+    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    Cour cour1 = courService.getById(request.id());
-    Cour cour = courService.update(
-      cour1,
-      request.name(),
-      request.description(),
-      request.imgPath(),
-      request.videoLink(),
-      request.contentCour(),
-      request.status()
+    if (internService.doesExistForUsers(users)) {
+      Cour cour1 = courService.getById(request.id());
+      Cour cour = courService.update(
+        cour1,
+        request.name(),
+        request.description(),
+        request.imgPath(),
+        request.videoLink(),
+        request.contentCour(),
+        request.status()
+      );
+      return CourMapper.toGetCourResponse(cour);
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
     );
-    return CourMapper.toGetCourResponse(cour);
   }
 
   @DeleteMapping(value = "{id}")
@@ -116,10 +134,14 @@ public class CourResource {
   public void delete(
     @Valid @RequestBody GetByIdCourRequest request,
     @PathVariable Long id
-  ) throws TechnicalNotFoundException {
+  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    internService.getById(users);
-    Cour cour = courService.getById(request.id());
-    courService.delete(cour);
+    if (internService.doesExistForUsers(users)) {
+      Cour cour = courService.getById(request.id());
+      courService.delete(cour);
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
+    );
   }
 }

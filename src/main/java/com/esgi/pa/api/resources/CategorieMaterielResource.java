@@ -26,6 +26,7 @@ import com.esgi.pa.api.mappers.CategorieMaterielMapper;
 import com.esgi.pa.domain.entities.CategorieMateriel;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Users;
+import com.esgi.pa.domain.exceptions.NotAuthorizationRessourceException;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.CategorieMaterielService;
@@ -52,11 +53,15 @@ public class CategorieMaterielResource {
   @GetMapping("{id}")
   public List<GetCategorieMaterielResponse> getAllCategorieMateriels(
     @PathVariable Long id
-  ) throws TechnicalNotFoundException {
+  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return CategorieMaterielMapper.toGetCategorieMaterielResponse(
-      categorieMaterielService.findAll()
+    if (internService.doesExistForUsers(users)) {
+      return CategorieMaterielMapper.toGetCategorieMaterielResponse(
+        categorieMaterielService.findAll()
+      );
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
 
@@ -64,11 +69,15 @@ public class CategorieMaterielResource {
   public GetCategorieMaterielResponse getCategorieMaterielById(
     @PathVariable Long id,
     @Valid @RequestBody GetByIdCategorieMaterielRequest request
-  ) throws TechnicalNotFoundException {
+  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-    return CategorieMaterielMapper.toGetCategorieMaterielResponse(
-      categorieMaterielService.getById(request.id())
+    if (internService.doesExistForUsers(users)) {
+      return CategorieMaterielMapper.toGetCategorieMaterielResponse(
+        categorieMaterielService.getById(request.id())
+      );
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
 
@@ -94,19 +103,23 @@ public class CategorieMaterielResource {
   public GetCategorieMaterielResponse update(
     @Valid @RequestBody UpdateCategorieMaterielRequest request,
     @PathVariable Long id
-  ) throws TechnicalFoundException, TechnicalNotFoundException {
+  )
+    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    Intern intern = internService.getById(users);
-
-    CategorieMateriel categorieMateriel1 = categorieMaterielService.getById(
-      request.id()
-    );
-    CategorieMateriel categorieMateriel = categorieMaterielService.update(
-      categorieMateriel1,
-      request.name()
-    );
-    return CategorieMaterielMapper.toGetCategorieMaterielResponse(
-      categorieMateriel
+    if (internService.doesExistForUsers(users)) {
+      CategorieMateriel categorieMateriel1 = categorieMaterielService.getById(
+        request.id()
+      );
+      CategorieMateriel categorieMateriel = categorieMaterielService.update(
+        categorieMateriel1,
+        request.name()
+      );
+      return CategorieMaterielMapper.toGetCategorieMaterielResponse(
+        categorieMateriel
+      );
+    }
+    throw new NotAuthorizationRessourceException(
+      "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
 

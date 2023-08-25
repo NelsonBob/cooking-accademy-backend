@@ -1,19 +1,28 @@
 package com.esgi.pa.api.resources;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.esgi.pa.domain.services.util.UtilService;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.esgi.pa.domain.services.util.UtilService;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Contient les routes lié au traitement de fichiers
@@ -24,7 +33,6 @@ import java.util.UUID;
 public class FileResource {
 
     private static final String UPLOAD_DIR = "src/main/resources/files/";
-    private final UtilService utilService;
 
     /**
      * Permet le stockage d'un fichier
@@ -37,7 +45,7 @@ public class FileResource {
         try {
             String fileName =
                 UUID.randomUUID().toString() + "_" + audio.getOriginalFilename();
-            return utilService.saveFile(audio, fileName);
+            return UtilService.saveFile(audio, fileName);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to upload file");
@@ -100,7 +108,7 @@ public class FileResource {
 
             String fileName =
                     UUID.randomUUID().toString() + "_" + audio.getOriginalFilename();
-            return utilService.saveFile(audio, fileName);
+            return UtilService.saveFile(audio, fileName);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to upload file");
