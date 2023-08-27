@@ -18,5 +18,5 @@ public record UpdateSalleRequest(
   @NotBlank(message = "Description is required") String description,
   @NotBlank(message = "imgPath is required") String imgPath,
   @NotNull(message = "gallerie is required") List<GallerieRequest> gallerie,
-  @NotBlank(message = "status is required") Boolean status
+  @NotNull(message = "status is required") Boolean status
 ) {}

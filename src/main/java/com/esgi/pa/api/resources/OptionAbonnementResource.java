@@ -3,21 +3,6 @@ package com.esgi.pa.api.resources;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.esgi.pa.api.dtos.requests.optionAbonnement.CreateOptionAbonnementRequest;
 import com.esgi.pa.api.dtos.requests.optionAbonnement.UpdateOptionAbonnementRequest;
 import com.esgi.pa.api.dtos.responses.optionAbonnement.GetOptionAbonnementResponse;
@@ -31,9 +16,21 @@ import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.OptionAbonnementService;
 import com.esgi.pa.domain.services.UserService;
-
 import io.swagger.annotations.Api;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Contient les routes des Service Abonnement
@@ -58,8 +55,7 @@ public class OptionAbonnementResource {
       return OptionAbonnementMapper.toGetOptionAbonnementResponse(
         optionAbonnementService.findAll()
       );
-    }
-    else throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -74,8 +70,7 @@ public class OptionAbonnementResource {
       return OptionAbonnementMapper.toGetOptionAbonnementResponse(
         optionAbonnementService.getById(idk)
       );
-    }
-    else throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -89,28 +84,25 @@ public class OptionAbonnementResource {
       return OptionAbonnementMapper.toGetOptionAbonnementResponse(
         optionAbonnementService.findByStatus()
       );
-    }
-    else throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
 
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
-  public GetOptionAbonnementResponse create(
+  public ResponseEntity<?> create(
     @Valid @RequestBody CreateOptionAbonnementRequest request,
     @PathVariable Long id
   ) throws TechnicalFoundException, TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
-    OptionAbonnement optionAbonnement = optionAbonnementService.create(
+    optionAbonnementService.create(
       intern,
       request.name(),
       request.optionServiceAbonnementRequests()
     );
-    return OptionAbonnementMapper.toGetOptionAbonnementResponse(
-      optionAbonnement
-    );
+    return ResponseEntity.status(CREATED).build();
   }
 
   @PutMapping(value = "{id}")
@@ -134,8 +126,7 @@ public class OptionAbonnementResource {
       return OptionAbonnementMapper.toGetOptionAbonnementResponse(
         optionAbonnement
       );
-    }
-    else throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -148,8 +139,7 @@ public class OptionAbonnementResource {
     if (internService.doesExistForUsers(users)) {
       OptionAbonnement optionAbonnement = optionAbonnementService.getById(idk);
       optionAbonnementService.delete(optionAbonnement);
-    }
-    else throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }

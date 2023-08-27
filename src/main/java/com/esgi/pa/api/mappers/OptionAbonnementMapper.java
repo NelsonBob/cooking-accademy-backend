@@ -16,7 +16,8 @@ public interface OptionAbonnementMapper {
       optionAbonnement.getName(),
       OptionServiceAbonnementMapper.toGetOptionServiceAbonnementResponse(
         optionAbonnement.getOptionServiceAbonnement()
-      )
+      ),
+      optionAbonnement.getStatus()
     );
   }
 

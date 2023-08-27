@@ -11,5 +11,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 public record GetOptionAbonnementResponse(
   Long id,
   String name,
-  List<GetOptionServiceAbonnementResponse> optionServiceAbonnement
+  List<GetOptionServiceAbonnementResponse> optionServiceAbonnement,
+  Boolean status
 ) {}

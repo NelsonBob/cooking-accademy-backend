@@ -19,8 +19,8 @@ import lombok.Builder;
 public record UpdateOptionServiceAbonnementRequest(
   @NotNull(message = "Long is required") Long id,
   @NotBlank(message = "Name is required") Long serviceAbonnement,
-  @NotBlank(message = "Icon is required") Boolean icon,
-  @NotBlank(message = "Description is required") Boolean description,
-  @NotBlank(message = "ValueIcon is required") Boolean isValueicon,
+  @NotNull(message = "Icon is required") Boolean icon,
+  @NotNull(message = "Description is required") Boolean description,
+  @NotNull(message = "ValueIcon is required") Boolean isValueicon,
   @NotBlank(message = "DescriptionValue is required") String descriptionvalue
 ) {}

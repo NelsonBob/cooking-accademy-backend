@@ -37,7 +37,7 @@ public class OptionAbonnementService {
       );
   }
 
-  public OptionAbonnement create(
+  public void create(
     Intern creator,
     String name,
     List<CreateOptionServiceAbonnementRequest> data
@@ -72,8 +72,6 @@ public class OptionAbonnementService {
           e.printStackTrace();
         }
       });
-
-      return saveop;
     } else {
       throw new TechnicalFoundException(
         "Un option d'abonnement existe Déjà avec ce nom :" + name
@@ -117,6 +115,7 @@ public class OptionAbonnementService {
           optionServiceAbonnement.setDescription(el.description());
           optionServiceAbonnement.setIsValueicon(el.isValueicon());
           optionServiceAbonnement.setDescriptionvalue(el.descriptionvalue());
+          optionServiceAbonnementRepository.save(optionServiceAbonnement);
         } catch (TechnicalNotFoundException e) {
           e.printStackTrace();
         }

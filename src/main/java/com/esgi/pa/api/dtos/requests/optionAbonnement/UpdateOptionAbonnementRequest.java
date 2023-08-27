@@ -20,7 +20,7 @@ import lombok.Builder;
 public record UpdateOptionAbonnementRequest(
   @NotNull(message = "Long is required") Long id,
   @NotBlank(message = "Name is required") String name,
-  @NotBlank(message = "Status is required") Boolean status,
+  @NotNull(message = "Status is required") Boolean status,
   @NotNull(message = "optionServiceAbonnementRequests is required")
   List<UpdateOptionServiceAbonnementRequest> optionServiceAbonnementRequests
 ) {}
