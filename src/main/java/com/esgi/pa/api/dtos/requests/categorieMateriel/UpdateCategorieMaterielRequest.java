@@ -12,6 +12,5 @@ import lombok.Builder;
 @JsonAutoDetect(fieldVisibility = ANY)
 public record UpdateCategorieMaterielRequest(
   @NotNull(message = "Long is required") Long id,
-  Boolean status,
   @NotBlank(message = "Name is required") String name
 ) {}
