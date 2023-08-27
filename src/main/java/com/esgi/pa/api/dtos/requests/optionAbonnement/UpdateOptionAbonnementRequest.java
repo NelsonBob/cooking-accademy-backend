@@ -18,7 +18,7 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record UpdateOptionAbonnementRequest(
-  @NotBlank(message = "Long is required") Long id,
+  @NotNull(message = "Long is required") Long id,
   @NotBlank(message = "Name is required") String name,
   @NotBlank(message = "Status is required") Boolean status,
   @NotNull(message = "optionServiceAbonnementRequests is required")

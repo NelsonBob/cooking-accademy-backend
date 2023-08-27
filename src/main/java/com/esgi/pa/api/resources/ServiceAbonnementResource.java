@@ -4,7 +4,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.esgi.pa.api.dtos.requests.serviceAbonnement.CreateServiceAbonnementRequest;
-import com.esgi.pa.api.dtos.requests.serviceAbonnement.GetByIdServiceAbonnementRequest;
 import com.esgi.pa.api.dtos.requests.serviceAbonnement.UpdateServiceAbonnementRequest;
 import com.esgi.pa.api.dtos.responses.serviceAbonnement.GetServiceAbonnementResponse;
 import com.esgi.pa.api.mappers.ServiceAbonnementMapper;
@@ -17,7 +16,11 @@ import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.ServiceAbonnementService;
 import com.esgi.pa.domain.services.UserService;
+import com.esgi.pa.domain.services.util.UtilService;
+
 import io.swagger.annotations.Api;
+
+import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -56,23 +59,23 @@ public class ServiceAbonnementResource {
         serviceAbonnementService.findAll()
       );
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
 
-  @GetMapping("user/{id}")
+  @GetMapping("{id}/id/{idk}")
   public GetServiceAbonnementResponse getServiceAbonnementById(
     @PathVariable Long id,
-    @Valid @RequestBody GetByIdServiceAbonnementRequest request
+    @PathVariable Long idk
   ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return ServiceAbonnementMapper.toGetServiceAbonnementResponse(
-        serviceAbonnementService.getById(request.id())
+        serviceAbonnementService.getById(idk)
       );
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -87,7 +90,7 @@ public class ServiceAbonnementResource {
         serviceAbonnementService.findByStatus()
       );
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -134,25 +137,23 @@ public class ServiceAbonnementResource {
         serviceAbonnement
       );
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
 
-  @DeleteMapping(value = "{id}")
+  @DeleteMapping(value = "{id}/id/{idk}")
   @ResponseStatus(OK)
-  public void delete(
-    @Valid @RequestBody GetByIdServiceAbonnementRequest request,
-    @PathVariable Long id
-  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+  public void delete(@PathVariable Long id, @PathVariable Long idk)
+    throws TechnicalNotFoundException, NotAuthorizationRessourceException, IOException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       ServiceAbonnement serviceAbonnement = serviceAbonnementService.getById(
-        request.id()
+        idk
       );
+      UtilService.removeFile(serviceAbonnement.getImgPath());
       serviceAbonnementService.delete(serviceAbonnement);
-    }
-    throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }

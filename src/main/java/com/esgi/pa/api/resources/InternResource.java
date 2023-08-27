@@ -68,7 +68,7 @@ public class InternResource {
       Intern intern1 = internService.getByIdIntern(idintern);
       return InternMapper.toGetInternResponse(intern1);
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -91,7 +91,7 @@ public class InternResource {
       );
       return InternMapper.toGetInternResponse(intern);
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -133,7 +133,7 @@ public class InternResource {
       );
       return InternMapper.toGetInternResponse(intern1);
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -148,11 +148,11 @@ public class InternResource {
       ) {
         return InternMapper.toGetInternResponse(internService.findAll());
       }
-      throw new NotAuthorizationRessourceException(
+      else throw new NotAuthorizationRessourceException(
         "Vous n'etes pas authorisé à accéder à cette ressource"
       );
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }

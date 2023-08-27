@@ -6,8 +6,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = ANY)
 public record GetServiceAbonnementResponse(
-    Long id,
-    String name,
-    String description,
-    Boolean status) {
-}
+  Long id,
+  String name,
+  String description,
+  String imgPath,
+  Boolean status
+) {}

@@ -4,6 +4,8 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.Builder;
 
 /**
@@ -15,7 +17,7 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record UpdateOptionServiceAbonnementRequest(
-  @NotBlank(message = "Long is required") Long id,
+  @NotNull(message = "Long is required") Long id,
   @NotBlank(message = "Name is required") Long serviceAbonnement,
   @NotBlank(message = "Icon is required") Boolean icon,
   @NotBlank(message = "Description is required") Boolean description,

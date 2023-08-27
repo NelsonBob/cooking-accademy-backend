@@ -62,7 +62,7 @@ public class ClientResource {
         clientService.getByIdClient(idintern)
       );
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -79,11 +79,11 @@ public class ClientResource {
 
         return ClientMapper.toGetClientResponse(clients);
       }
-      throw new NotAuthorizationRessourceException(
+      else throw new NotAuthorizationRessourceException(
         "Vous n'etes pas authorisé à accéder à cette ressource"
       );
     }
-    throw new NotAuthorizationRessourceException(
+    else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
