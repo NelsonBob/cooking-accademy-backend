@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "option_abonnements")
 public class OptionAbonnement {
 
   @Id
@@ -34,9 +36,10 @@ public class OptionAbonnement {
   private String name;
   private Boolean status;
   @ManyToOne
-  @JoinColumn(name = "creator_id")
+  @JoinColumn(name = "creator_id", referencedColumnName = "id")
   private Intern creator;
 
+  @Builder.Default
   @OneToMany(mappedBy = "optionAbonnement", fetch = FetchType.LAZY)
   private List<OptionServiceAbonnement> optionServiceAbonnement = new ArrayList<>();
 }

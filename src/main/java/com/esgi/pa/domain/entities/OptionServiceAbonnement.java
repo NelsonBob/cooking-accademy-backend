@@ -1,12 +1,15 @@
 package com.esgi.pa.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +23,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "option_service_abonnements")
 public class OptionServiceAbonnement {
 
   @Id
@@ -27,11 +31,11 @@ public class OptionServiceAbonnement {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "serviceAbonnement_id")
+  @JoinColumn(name = "serviceAbonnement_id", referencedColumnName = "id")
   private ServiceAbonnement serviceAbonnement;
 
   @ManyToOne
-  @JoinColumn(name = "optionAbonnement_id")
+  @JoinColumn(name = "optionAbonnement_id", referencedColumnName = "id")
   @JsonIgnoreProperties({ "optionAbonnement" })
   private OptionAbonnement optionAbonnement;
 

@@ -75,4 +75,19 @@ public class AuthResource {
       )
     );
   }
+  @PostMapping(value = "signup/admin")
+  @ResponseStatus(CREATED)
+  public AuthenticationUserResponse signupAdmin(
+    @Valid @RequestBody CreateUserRequest request
+  ) throws TechnicalFoundException {
+    return UserMapper.toAuthenticationUserResponse(
+      authService.create(
+        request.name(),
+        request.email(),
+        request.password(),
+        RoleEnum.Admin,
+        request.adress()
+      )
+    );
+  }
 }

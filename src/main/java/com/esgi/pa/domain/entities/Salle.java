@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "salles")
 public class Salle {
 
   @Id
@@ -38,7 +40,7 @@ public class Salle {
   private String gallerie;
 
   @ManyToOne
-  @JoinColumn(name = "creator_id")
+  @JoinColumn(name = "creator_id", referencedColumnName = "id")
   private Intern creator;
 
   private Boolean status;

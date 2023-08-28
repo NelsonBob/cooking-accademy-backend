@@ -25,6 +25,7 @@ import com.esgi.pa.domain.enums.RoleEnum;
 import com.esgi.pa.domain.exceptions.NotAuthorizationRessourceException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.ClientService;
+import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.UserService;
 import com.esgi.pa.domain.services.util.UtilService;
 
@@ -43,6 +44,7 @@ public class ClientResource {
 
   private final UserService userService;
   private final ClientService clientService;
+  private final InternService internService;
 
   /**
    * Récupère un utilisateur par son id
@@ -57,7 +59,7 @@ public class ClientResource {
     @PathVariable Long idintern
   ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    if (clientService.doesExistForUsers(users)) {
+    if (internService.doesExistForUsers(users)) {
       return ClientMapper.toGetClientResponse(
         clientService.getByIdClient(idintern)
       );
@@ -71,7 +73,7 @@ public class ClientResource {
   public List<GetClientResponse> getClientAll(@PathVariable Long id)
     throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
-    if (clientService.doesExistForUsers(users)) {
+    if (internService.doesExistForUsers(users)) {
       if (
         UtilService.isGranted(users.getRole(), Arrays.asList(RoleEnum.Admin))
       ) {

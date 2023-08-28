@@ -48,45 +48,42 @@ public class AuthService {
    * @throws TechnicalFoundException si l'utilisateur existe déjà
    */
   public String create(
-    String name,
-    String email,
-    String password,
-    RoleEnum role,
-    String adress
-  ) throws TechnicalFoundException {
+      String name,
+      String email,
+      String password,
+      RoleEnum role,
+      String adress) throws TechnicalFoundException {
     if (usersRepository.findByEmail(email).isEmpty()) {
       Users savedUser = usersRepository.save(
-        Users
-          .builder()
-          .name(name)
-          .email(email)
-          .password(passwordEncoder.encode(password))
-          .role(role)
-          .build()
-      );
+          Users
+              .builder()
+              .name(name)
+              .email(email)
+              .password(passwordEncoder.encode(password))
+              .role(role)
+              .build());
       Users users = usersRepository
-        .findByEmail(savedUser.getEmail())
-        .orElseThrow();
-      Client client = clientRepository.save(
-        Client.builder().users(users).adress(adress).nbVideoDay(0).build()
-      );
+          .findByEmail(savedUser.getEmail())
+          .orElseThrow();
+      if (role == RoleEnum.Client)
+        clientRepository.save(
+            Client.builder().users(users).adress(adress).nbVideoDay(0).build());
+      if (role == RoleEnum.Admin)
+        internRepository.save(Intern.builder().fonction(adress).users(users).build());
       return jwtService.generateToken(
-        Map.of(
-          "id",
-          users.getId(),
-          "name",
-          users.getName(),
-          "role",
-          users.getRole(),
-          "adress",
-          client.getAdress()
-        ),
-        users
-      );
+          Map.of(
+              "id",
+              users.getId(),
+              "name",
+              users.getName(),
+              "role",
+              users.getRole(),
+              "adress",
+              adress),
+          users);
     } else {
       throw new TechnicalFoundException(
-        "Un compte existe Déjà avec cet email :" + email
-      );
+          "Un compte existe Déjà avec cet email :" + email);
     }
   }
 
@@ -99,65 +96,49 @@ public class AuthService {
    * @throws TechnicalNotFoundException si l'utilisateur n'existe pas
    */
   public String login(String email, String password)
-    throws TechnicalNotFoundException {
+      throws TechnicalNotFoundException {
     authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(email, password)
-    );
+        new UsernamePasswordAuthenticationToken(email, password));
     Users users = usersRepository
-      .findByEmail(email)
-      .orElseThrow(() ->
-        new TechnicalNotFoundException(
-          HttpStatus.NOT_FOUND,
-          "Username not found with email : " + email
-        )
-      );
-
-    if (
-      UtilService.isGranted(users.getRole(), Arrays.asList(RoleEnum.Client))
-    ) {
-      Client client = clientRepository
-        .findByUsers(users)
-        .orElseThrow(() ->
-          new TechnicalNotFoundException(
+        .findByEmail(email)
+        .orElseThrow(() -> new TechnicalNotFoundException(
             HttpStatus.NOT_FOUND,
-            "Client not found with email : " + email
-          )
-        );
+            "Username not found with email : " + email));
+
+    if (UtilService.isGranted(users.getRole(), Arrays.asList(RoleEnum.Client))) {
+      Client client = clientRepository
+          .findByUsers(users)
+          .orElseThrow(() -> new TechnicalNotFoundException(
+              HttpStatus.NOT_FOUND,
+              "Client not found with email : " + email));
       return jwtService.generateToken(
-        Map.of(
-          "id",
-          users.getId(),
-          "name",
-          users.getName(),
-          "role",
-          users.getRole(),
-          "adress",
-          client.getAdress()
-        ),
-        users
-      );
+          Map.of(
+              "id",
+              users.getId(),
+              "name",
+              users.getName(),
+              "role",
+              users.getRole(),
+              "adress",
+              client.getAdress()),
+          users);
     } else {
       Intern intern = internRepository
-        .findByUsers(users)
-        .orElseThrow(() ->
-          new TechnicalNotFoundException(
-            HttpStatus.NOT_FOUND,
-            "Intern not found with email : " + email
-          )
-        );
+          .findByUsers(users)
+          .orElseThrow(() -> new TechnicalNotFoundException(
+              HttpStatus.NOT_FOUND,
+              "Intern not found with email : " + email));
       return jwtService.generateToken(
-        Map.of(
-          "id",
-          users.getId(),
-          "name",
-          users.getName(),
-          "role",
-          users.getRole(),
-          "fonction",
-          intern.getFonction()
-        ),
-        users
-      );
+          Map.of(
+              "id",
+              users.getId(),
+              "name",
+              users.getName(),
+              "role",
+              users.getRole(),
+              "fonction",
+              intern.getFonction()),
+          users);
     }
   }
 }

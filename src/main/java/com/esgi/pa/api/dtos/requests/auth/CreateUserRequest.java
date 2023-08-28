@@ -16,7 +16,6 @@ import lombok.Builder;
  * @param name     nom de l'utilisateur
  * @param email    email de l'utilisateur
  * @param password mot de passe de l'utilisateur
- * @param role     role de l'utilisateur
  * @param adress   adress de l'utilisateur
  */
 @Builder
