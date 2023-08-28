@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,98 +53,89 @@ public class SalleResource {
 
   @GetMapping("{id}")
   public List<GetSalleResponse> getAllSalles(@PathVariable Long id)
-    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return SalleMapper.toGetSalleResponse(salleService.findAll());
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @GetMapping("{id}/id/{idk}")
   public GetSalleResponse getSalleById(
-    @PathVariable Long id,
-    @PathVariable Long idk
-  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      @PathVariable Long id,
+      @PathVariable Long idk) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return SalleMapper.toGetSalleResponse(salleService.getById(idk));
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @GetMapping("actif/{id}")
   public List<GetSalleResponse> getSallesActif(@PathVariable Long id)
-    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return SalleMapper.toGetSalleResponse(salleService.findByStatus());
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
-  public GetSalleResponse create(
-    @Valid @RequestBody CreateSalleRequest request,
-    @PathVariable Long id
-  )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException {
+  public ResponseEntity<?> create(
+      @Valid @RequestBody CreateSalleRequest request,
+      @PathVariable Long id)
+      throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
 
-    Salle salle = salleService.create(
-      intern,
-      request.name(),
-      request.description(),
-      request.imgPath(),
-      request.gallerie()
-    );
-    return SalleMapper.toGetSalleResponse(salle);
+    salleService.create(
+        intern,
+        request.name(),
+        request.description(),
+        request.imgPath(),
+        request.gallerie());
+    return ResponseEntity.status(CREATED).build();
   }
 
   @PutMapping(value = "{id}")
   @ResponseStatus(OK)
   public GetSalleResponse update(
-    @Valid @RequestBody UpdateSalleRequest request,
-    @PathVariable Long id
-  )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException, NotAuthorizationRessourceException {
+      @Valid @RequestBody UpdateSalleRequest request,
+      @PathVariable Long id)
+      throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException,
+      NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       Salle salle1 = salleService.getById(request.id());
       Salle salle = salleService.update(
-        salle1,
-        request.name(),
-        request.description(),
-        request.imgPath(),
-        request.gallerie(),
-        request.status()
-      );
+          salle1,
+          request.name(),
+          request.description(),
+          request.imgPath(),
+          request.gallerie(),
+          request.status());
       return SalleMapper.toGetSalleResponse(salle);
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @DeleteMapping(value = "{id}/id/{idk}")
   @ResponseStatus(OK)
   public void delete(@PathVariable Long id, @PathVariable Long idk)
-    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       Salle salle = salleService.getById(idk);
       salleService.delete(salle);
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 }

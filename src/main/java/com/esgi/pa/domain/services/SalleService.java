@@ -1,5 +1,11 @@
 package com.esgi.pa.domain.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import com.esgi.pa.api.dtos.requests.salle.GallerieRequest;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Salle;
@@ -7,11 +13,8 @@ import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.SalleRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -21,58 +24,46 @@ public class SalleService {
 
   public Salle getById(Long id) throws TechnicalNotFoundException {
     return salleRepository
-      .findById(id)
-      .orElseThrow(() ->
-        new TechnicalNotFoundException(
-          HttpStatus.NOT_FOUND,
-          "No salle found with following id : "
-        )
-      );
+        .findById(id)
+        .orElseThrow(() -> new TechnicalNotFoundException(
+            HttpStatus.NOT_FOUND,
+            "No salle found with following id : "));
   }
 
-  public Salle create(
-    Intern creator,
-    String name,
-    String description,
-    String imgPath,
-    List<GallerieRequest> gallerie
-  ) throws TechnicalFoundException, JsonProcessingException {
+  public void create(
+      Intern creator,
+      String name,
+      String description,
+      String imgPath,
+      List<GallerieRequest> gallerie) throws TechnicalFoundException, JsonProcessingException {
     if (salleRepository.findByName(name).isEmpty()) {
-      System.out.print("tttttttttttttttttttttttttttttttttttt");
-      System.out.print(gallerie);
 
-      Salle saveAb = salleRepository.save(
-        Salle
-          .builder()
-          .name(name)
-          .description(description)
-          .creator(creator)
-          .status(Boolean.TRUE)
-          .imgPath(imgPath)
-          .gallerie(galleriesList(gallerie).toString())
-          .build()
-      );
-      return saveAb;
+      salleRepository.save(
+          Salle
+              .builder()
+              .name(name)
+              .description(description)
+              .creator(creator)
+              .status(Boolean.TRUE)
+              .imgPath(imgPath)
+              .gallerie(galleriesList(gallerie).toString())
+              .build());
     } else {
       throw new TechnicalFoundException(
-        "Une salle existe Déjà avec ce nom :" + name
-      );
+          "Une salle existe Déjà avec ce nom :" + name);
     }
   }
 
   public Salle update(
-    Salle salle,
-    String name,
-    String description,
-    String imgPath,
-    List<GallerieRequest> gallerie,
-    Boolean status
-  ) throws TechnicalFoundException, JsonProcessingException {
-    if (
-      salleRepository.findByName(name).isEmpty() ||
-      salleRepository.findByName(name).isPresent() &&
-      salleRepository.findByName(name).get().getId() == salle.getId()
-    ) {
+      Salle salle,
+      String name,
+      String description,
+      String imgPath,
+      List<GallerieRequest> gallerie,
+      Boolean status) throws TechnicalFoundException, JsonProcessingException {
+    if (salleRepository.findByName(name).isEmpty() ||
+        salleRepository.findByName(name).isPresent() &&
+            salleRepository.findByName(name).get().getId() == salle.getId()) {
       salle.setName(name);
       salle.setDescription(description);
       salle.setStatus(status);
@@ -83,8 +74,7 @@ public class SalleService {
       return saveAb;
     } else {
       throw new TechnicalFoundException(
-        "Une salle existe Déjà avec ce nom :" + name
-      );
+          "Une salle existe Déjà avec ce nom :" + name);
     }
   }
 

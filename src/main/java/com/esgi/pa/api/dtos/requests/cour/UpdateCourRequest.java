@@ -13,6 +13,7 @@ import lombok.Builder;
 public record UpdateCourRequest(
   @NotNull(message = "Long is required") Long id,
   Boolean status,
+  Boolean isVideoLocal,
   @NotBlank(message = "Name is required") String name,
   @NotBlank(message = "description is required") String description,
   @NotBlank(message = "imgPath is required") String imgPath,

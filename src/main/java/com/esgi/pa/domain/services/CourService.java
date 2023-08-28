@@ -21,53 +21,50 @@ public class CourService {
 
   public Cour getById(Long id) throws TechnicalNotFoundException {
     return courRepository
-      .findById(id)
-      .orElseThrow(() ->
-        new TechnicalNotFoundException(
-          HttpStatus.NOT_FOUND,
-          "No cour found with following id : "
-        )
-      );
+        .findById(id)
+        .orElseThrow(() -> new TechnicalNotFoundException(
+            HttpStatus.NOT_FOUND,
+            "No cour found with following id : "));
   }
 
-  public Cour create(
-    Intern creator,
-    String name,
-    String description,
-    String imgPath,
-    String videoLink,
-    String contentCour
-  ) throws TechnicalFoundException {
-    Cour saveAb = courRepository.save(
-      Cour
-        .builder()
-        .name(name)
-        .description(description)
-        .creator(creator)
-        .status(Boolean.TRUE)
-        .imgPath(imgPath)
-        .contentCour(contentCour)
-        .videoLink(videoLink)
-        .build()
-    );
-    return saveAb;
+  public void create(
+      Intern creator,
+      String name,
+      String description,
+      String imgPath,
+      String videoLink,
+      String contentCour,
+      Boolean isVideoLocal) throws TechnicalFoundException {
+    courRepository.save(
+        Cour
+            .builder()
+            .name(name)
+            .description(description)
+            .creator(creator)
+            .status(Boolean.TRUE)
+            .imgPath(imgPath)
+            .contentCour(contentCour)
+            .videoLink(videoLink)
+            .isVideoLocal(isVideoLocal)
+            .build());
   }
 
   public Cour update(
-    Cour cour,
-    String name,
-    String description,
-    String imgPath,
-    String videoLink,
-    String contentCour,
-    Boolean status
-  ) {
+      Cour cour,
+      String name,
+      String description,
+      String imgPath,
+      String videoLink,
+      String contentCour,
+      Boolean status,
+      Boolean isVideoLocal) {
     cour.setName(name);
     cour.setDescription(description);
     cour.setStatus(status);
     cour.setImgPath(imgPath);
     cour.setVideoLink(videoLink);
     cour.setContentCour(contentCour);
+    cour.setIsVideoLocal(isVideoLocal);
     Cour saveAb = courRepository.save(cour);
     return saveAb;
   }

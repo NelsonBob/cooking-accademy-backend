@@ -9,9 +9,10 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record CreateCourRequest(
-  @NotBlank(message = "Name is required") String name,
-  @NotBlank(message = "description is required") String description,
-  @NotBlank(message = "imgPath is required") String imgPath,
-  @NotBlank(message = "videoLink is required") String videoLink,
-  @NotBlank(message = "contentCour is required") String contentCour
-) {}
+    @NotBlank(message = "Name is required") String name,
+    @NotBlank(message = "description is required") String description,
+    @NotBlank(message = "imgPath is required") String imgPath,
+    @NotBlank(message = "videoLink is required") String videoLink,
+    @NotBlank(message = "contentCour is required") String contentCour,
+    Boolean isVideoLocal) {
+}

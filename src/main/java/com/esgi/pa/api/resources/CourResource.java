@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,98 +52,90 @@ public class CourResource {
 
   @GetMapping("{id}")
   public List<GetCourResponse> getAllCours(@PathVariable Long id)
-    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return CourMapper.toGetCourResponse(courService.findAll());
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @GetMapping("{id}/id/{idk}")
   public GetCourResponse getCourById(
-    @PathVariable Long id,
-    @PathVariable Long idk
-  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      @PathVariable Long id,
+      @PathVariable Long idk) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return CourMapper.toGetCourResponse(courService.getById(idk));
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @GetMapping("actif/{id}")
   public List<GetCourResponse> getCoursActif(@PathVariable Long id)
-    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return CourMapper.toGetCourResponse(courService.findByStatus());
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
-  public GetCourResponse create(
-    @Valid @RequestBody CreateCourRequest request,
-    @PathVariable Long id
-  ) throws TechnicalFoundException, TechnicalNotFoundException {
+  public ResponseEntity<?> create(
+      @Valid @RequestBody CreateCourRequest request,
+      @PathVariable Long id) throws TechnicalFoundException, TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
-    Cour cour = courService.create(
-      intern,
-      request.name(),
-      request.description(),
-      request.imgPath(),
-      request.videoLink(),
-      request.contentCour()
-    );
-    return CourMapper.toGetCourResponse(cour);
-  }
-
-  @PutMapping(value = "{id}")
-  @ResponseStatus(OK)
-  public GetCourResponse update(
-    @Valid @RequestBody UpdateCourRequest request,
-    @PathVariable Long id
-  )
-    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
-    Users users = userService.getById(id);
-    if (internService.doesExistForUsers(users)) {
-      Cour cour1 = courService.getById(request.id());
-      Cour cour = courService.update(
-        cour1,
+    courService.create(
+        intern,
         request.name(),
         request.description(),
         request.imgPath(),
         request.videoLink(),
         request.contentCour(),
-        request.status()
-      );
+        request.isVideoLocal());
+    return ResponseEntity.status(CREATED).build();
+  }
+
+  @PutMapping(value = "{id}")
+  @ResponseStatus(OK)
+  public GetCourResponse update(
+      @Valid @RequestBody UpdateCourRequest request,
+      @PathVariable Long id)
+      throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
+    Users users = userService.getById(id);
+    if (internService.doesExistForUsers(users)) {
+      Cour cour1 = courService.getById(request.id());
+      Cour cour = courService.update(
+          cour1,
+          request.name(),
+          request.description(),
+          request.imgPath(),
+          request.videoLink(),
+          request.contentCour(),
+          request.status(),
+          request.isVideoLocal());
       return CourMapper.toGetCourResponse(cour);
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @DeleteMapping(value = "{id}/id/{idk}")
   @ResponseStatus(OK)
   public void delete(@PathVariable Long idk, @PathVariable Long id)
-    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       Cour cour = courService.getById(idk);
       courService.delete(cour);
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 }

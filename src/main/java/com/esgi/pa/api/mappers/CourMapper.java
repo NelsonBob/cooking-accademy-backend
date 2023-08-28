@@ -5,27 +5,28 @@ import com.esgi.pa.domain.entities.Cour;
 import java.util.List;
 
 /**
- * Contient les méthodes pour mapper les entités utilisateur du domain vers des dtos
+ * Contient les méthodes pour mapper les entités utilisateur du domain vers des
+ * dtos
  */
 public interface CourMapper {
   static GetCourResponse toGetCourResponse(Cour cour) {
     return new GetCourResponse(
-      cour.getId(),
-      cour.getName(),
-      cour.getDescription(),
-      cour.getImgPath(),
-      cour.getVideoLink(),
-      cour.getContentCour(),
-      cour.getStatus(),
-      cour.getCreator()
-    );
+        cour.getId(),
+        cour.getName(),
+        cour.getDescription(),
+        cour.getImgPath(),
+        cour.getVideoLink(),
+        cour.getContentCour(),
+        cour.getStatus(),
+        cour.getIsVideoLocal(),
+        InternMapper.toGetInternResponse(cour.getCreator()));
   }
 
   static List<GetCourResponse> toGetCourResponse(List<Cour> entities) {
     return entities
-      .stream()
-      .map(CourMapper::toGetCourResponse)
-      .distinct()
-      .toList();
+        .stream()
+        .map(CourMapper::toGetCourResponse)
+        .distinct()
+        .toList();
   }
 }
