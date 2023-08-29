@@ -33,7 +33,7 @@ public class CategorieMaterielService {
   public CategorieMateriel create(Intern creator, String name)
     throws TechnicalFoundException {
     CategorieMateriel saveAb = categorieMaterielRepository.save(
-      CategorieMateriel.builder().name(name).build()
+      CategorieMateriel.builder().name(name).creator(creator).build()
     );
     return saveAb;
   }

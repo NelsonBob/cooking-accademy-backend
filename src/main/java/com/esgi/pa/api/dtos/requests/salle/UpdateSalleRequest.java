@@ -14,7 +14,7 @@ import lombok.Builder;
 @JsonAutoDetect(fieldVisibility = ANY)
 public record UpdateSalleRequest(
   @NotBlank(message = "name is required") String name,
-  @NotBlank(message = "Id is required") Long id,
+  @NotNull(message = "Id is required") Long id,
   @NotBlank(message = "Description is required") String description,
   @NotBlank(message = "imgPath is required") String imgPath,
   @NotNull(message = "gallerie is required") List<GallerieRequest> gallerie,

@@ -16,6 +16,7 @@ public interface SalleMapper {
       salle.getName(),
       salle.getDescription(),
       salle.getImgPath(),
+      salle.getStatus(),
       convertToEntityAttribute(salle.getGallerie()),
       InternMapper.toGetInternResponse(salle.getCreator())
     );

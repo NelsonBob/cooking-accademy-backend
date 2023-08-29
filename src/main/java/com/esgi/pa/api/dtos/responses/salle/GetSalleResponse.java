@@ -11,6 +11,7 @@ public record GetSalleResponse(
   String name,
   String description,
   String imgPath,
+  Boolean status,
   String[] gallerie,
   GetInternResponse creator
 ) {}

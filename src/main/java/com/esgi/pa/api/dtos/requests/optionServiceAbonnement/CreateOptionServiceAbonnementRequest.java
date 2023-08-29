@@ -17,7 +17,7 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record CreateOptionServiceAbonnementRequest(
-  @NotBlank(message = "Name is required") Long serviceAbonnement,
+  @NotNull(message = "Name is required") Long serviceAbonnement,
   @NotNull(message = "Icon is required") Boolean icon,
   @NotNull(message = "Description is required") Boolean description,
   @NotNull(message = "ValueIcon is required") Boolean isValueicon,
