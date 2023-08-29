@@ -72,18 +72,7 @@ public class CourResource {
       throw new NotAuthorizationRessourceException(
           "Vous n'etes pas authorisé à accéder à cette ressource");
   }
-
-  @GetMapping("actif/{id}")
-  public List<GetCourResponse> getCoursActif(@PathVariable Long id)
-      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
-    Users users = userService.getById(id);
-    if (internService.doesExistForUsers(users)) {
-      return CourMapper.toGetCourResponse(courService.findByStatus());
-    } else
-      throw new NotAuthorizationRessourceException(
-          "Vous n'etes pas authorisé à accéder à cette ressource");
-  }
-
+ 
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
   public ResponseEntity<?> create(

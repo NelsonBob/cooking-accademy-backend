@@ -96,6 +96,6 @@ public class ServiceAbonnementService {
   }
 
   public List<ServiceAbonnement> findByStatus() {
-    return serviceAbonnementRepository.findByStatus(Boolean.TRUE);
+    return serviceAbonnementRepository.findByStatusOrderById(Boolean.TRUE);
   }
 }

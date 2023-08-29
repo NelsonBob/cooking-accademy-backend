@@ -48,99 +48,75 @@ public class OptionAbonnementResource {
 
   @GetMapping("{id}")
   public List<GetOptionAbonnementResponse> getAllOptionAbonnements(
-    @PathVariable Long id
-  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      @PathVariable Long id) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return OptionAbonnementMapper.toGetOptionAbonnementResponse(
-        optionAbonnementService.findAll()
-      );
-    } else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+          optionAbonnementService.findAll());
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @GetMapping("{id}/id/{idk}")
   public GetOptionAbonnementResponse getOptionAbonnementById(
-    @PathVariable Long id,
-    @PathVariable Long idk
-  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      @PathVariable Long id,
+      @PathVariable Long idk) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       return OptionAbonnementMapper.toGetOptionAbonnementResponse(
-        optionAbonnementService.getById(idk)
-      );
-    } else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
-  }
-
-  @GetMapping("actif/{id}")
-  public List<GetOptionAbonnementResponse> getOptionAbonnementsActif(
-    @PathVariable Long id
-  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
-    Users users = userService.getById(id);
-    if (internService.doesExistForUsers(users)) {
-      return OptionAbonnementMapper.toGetOptionAbonnementResponse(
-        optionAbonnementService.findByStatus()
-      );
-    } else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+          optionAbonnementService.getById(idk));
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
   public ResponseEntity<?> create(
-    @Valid @RequestBody CreateOptionAbonnementRequest request,
-    @PathVariable Long id
-  ) throws TechnicalFoundException, TechnicalNotFoundException {
+      @Valid @RequestBody CreateOptionAbonnementRequest request,
+      @PathVariable Long id) throws TechnicalFoundException, TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
     optionAbonnementService.create(
-      intern,
-      request.name(),
-      request.optionServiceAbonnementRequests()
-    );
+        intern,
+        request.name(),
+        request.optionServiceAbonnementRequests());
     return ResponseEntity.status(CREATED).build();
   }
 
   @PutMapping(value = "{id}")
   @ResponseStatus(OK)
   public GetOptionAbonnementResponse update(
-    @Valid @RequestBody UpdateOptionAbonnementRequest request,
-    @PathVariable Long id
-  )
-    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
+      @Valid @RequestBody UpdateOptionAbonnementRequest request,
+      @PathVariable Long id)
+      throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       OptionAbonnement optionAbonnement1 = optionAbonnementService.getById(
-        request.id()
-      );
+          request.id());
       OptionAbonnement optionAbonnement = optionAbonnementService.update(
-        optionAbonnement1,
-        request.name(),
-        request.status(),
-        request.optionServiceAbonnementRequests()
-      );
+          optionAbonnement1,
+          request.name(),
+          request.status(),
+          request.optionServiceAbonnementRequests());
       return OptionAbonnementMapper.toGetOptionAbonnementResponse(
-        optionAbonnement
-      );
-    } else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+          optionAbonnement);
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @DeleteMapping(value = "{id}/id/{idk}")
   @ResponseStatus(OK)
   public void delete(@PathVariable Long idk, @PathVariable Long id)
-    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       OptionAbonnement optionAbonnement = optionAbonnementService.getById(idk);
       optionAbonnementService.delete(optionAbonnement);
-    } else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 }

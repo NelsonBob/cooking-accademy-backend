@@ -12,5 +12,5 @@ import com.esgi.pa.domain.entities.ServiceAbonnement;
  */
 public interface ServiceAbonnementRepository extends JpaRepository<ServiceAbonnement, Long> {
     Optional<ServiceAbonnement> findByName(String name);
-    List<ServiceAbonnement> findByStatus(Boolean status);
+    List<ServiceAbonnement> findByStatusOrderById(Boolean status);
 }
