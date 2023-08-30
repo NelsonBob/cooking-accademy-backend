@@ -42,6 +42,7 @@ public class Users implements UserDetails {
   @Column(unique = true)
   private String email;
   private String password;
+  private String imgPath;
   @With
   @Enumerated(EnumType.STRING)
   private RoleEnum role;

@@ -34,24 +34,20 @@ public class UserService {
    */
   public Users getById(Long id) throws TechnicalNotFoundException {
     return usersRepository
-      .findById(id)
-      .orElseThrow(() ->
-        new TechnicalNotFoundException(
-          HttpStatus.NOT_FOUND,
-          "No user found with following id : " + id
-        )
-      );
+        .findById(id)
+        .orElseThrow(() -> new TechnicalNotFoundException(
+            HttpStatus.NOT_FOUND,
+            "No user found with following id : " + id));
   }
+
   public Users getByEmail(String email) throws TechnicalNotFoundException {
     return usersRepository
-            .findByEmail(email)
-            .orElseThrow(() ->
-                    new TechnicalNotFoundException(
-                            HttpStatus.NOT_FOUND,
-                            "No user found with following id : "
-                    )
-            );
+        .findByEmail(email)
+        .orElseThrow(() -> new TechnicalNotFoundException(
+            HttpStatus.NOT_FOUND,
+            "No user found with following id : "));
   }
+
   /**
    * Persiste un utilisateur
    *
@@ -61,4 +57,12 @@ public class UserService {
   public Users save(Users users) {
     return usersRepository.save(users);
   }
+
+  public void updatePicture(
+      Users users,
+      String imgPath) {
+    users.setImgPath(imgPath);
+    usersRepository.save(users);
+  }
+
 }

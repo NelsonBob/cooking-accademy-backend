@@ -119,6 +119,8 @@ public class AuthService {
               users.getName(),
               "role",
               users.getRole(),
+              "picture",
+              users.getImgPath(),
               "adress",
               client.getAdress()),
           users);
@@ -136,6 +138,8 @@ public class AuthService {
               users.getName(),
               "role",
               users.getRole(),
+              "picture",
+              users.getImgPath(),
               "fonction",
               intern.getFonction()),
           users);
