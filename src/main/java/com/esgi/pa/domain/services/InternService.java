@@ -1,5 +1,12 @@
 package com.esgi.pa.domain.services;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.RoleEnum;
@@ -7,12 +14,8 @@ import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.InternRepository;
 import com.esgi.pa.server.repositories.UsersRepository;
-import java.util.List;
-import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 /**
  * Service de gestion des utilisateurs
@@ -28,30 +31,28 @@ public class InternService {
   /**
    * Récupère un utilisateur par son id
    *
-   * @param user  numérique de l'utilsateur
+   * @param user numérique de l'utilsateur
    * @return utilisateur recherché
    * @throws TechnicalNotFoundException si l'utilisateur n'est pas trouvé
    */
   public Intern getById(Users user) throws TechnicalNotFoundException {
     return internRepository
-      .findByUsers(user)
-      .orElseThrow(() ->
-        new TechnicalNotFoundException(
-          HttpStatus.NOT_FOUND,
-          "No inter found with following id : "
-        )
-      );
+        .findByUsers(user)
+        .orElseThrow(() -> new TechnicalNotFoundException(
+            HttpStatus.NOT_FOUND,
+            "No inter found with following id : "));
+  }
+
+  public List<Intern> findTop4Chefs() {
+    return internRepository.findTop4ByUsersRole(RoleEnum.Chefs);
   }
 
   public Intern getByIdIntern(Long id) throws TechnicalNotFoundException {
     return internRepository
-      .findById(id)
-      .orElseThrow(() ->
-        new TechnicalNotFoundException(
-          HttpStatus.NOT_FOUND,
-          "No inter found with following id : "
-        )
-      );
+        .findById(id)
+        .orElseThrow(() -> new TechnicalNotFoundException(
+            HttpStatus.NOT_FOUND,
+            "No inter found with following id : "));
   }
 
   public boolean doesExistForUsers(Users users) {
@@ -59,48 +60,41 @@ public class InternService {
   }
 
   public Intern create(
-    String name,
-    String email,
-    String password,
-    RoleEnum role,
-    String fonction
-  ) throws TechnicalFoundException {
+      String name,
+      String email,
+      String password,
+      RoleEnum role,
+      String fonction) throws TechnicalFoundException {
     if (usersRepository.findByEmail(email).isEmpty()) {
       Users savedUser = usersRepository.save(
-        Users
-          .builder()
-          .name(name)
-          .email(email)
-          .password(passwordEncoder.encode(password))
-          .role(role)
-          .build()
-      );
+          Users
+              .builder()
+              .name(name)
+              .email(email)
+              .password(passwordEncoder.encode(password))
+              .role(role)
+              .build());
       Users users = usersRepository
-        .findByEmail(savedUser.getEmail())
-        .orElseThrow();
+          .findByEmail(savedUser.getEmail())
+          .orElseThrow();
       return internRepository.save(
-        Intern.builder().fonction(fonction).users(users).build()
-      );
+          Intern.builder().fonction(fonction).users(users).build());
     } else {
       throw new TechnicalFoundException(
-        "Un compte existe Déjà avec cet email :" + email
-      );
+          "Un compte existe Déjà avec cet email :" + email);
     }
   }
 
   public Intern update(
-    Intern intern,
-    String name,
-    String email,
-    RoleEnum role,
-    String fonction
-  ) throws TechnicalFoundException {
+      Intern intern,
+      String name,
+      String email,
+      RoleEnum role,
+      String fonction) throws TechnicalFoundException {
     Optional<Users> users = usersRepository.findByEmail(email);
-    if (
-      users.isEmpty() ||
-      users.isPresent() &&
-      users.get().getId() == intern.getUsers().getId()
-    ) {
+    if (users.isEmpty() ||
+        users.isPresent() &&
+            users.get().getId() == intern.getUsers().getId()) {
       intern.getUsers().setName(name);
       intern.getUsers().setEmail(email);
       intern.getUsers().setRole(role);
@@ -110,17 +104,15 @@ public class InternService {
       return internRepository.save(intern);
     } else {
       throw new TechnicalFoundException(
-        "Un compte existe Déjà avec cet email :" + email
-      );
+          "Un compte existe Déjà avec cet email :" + email);
     }
   }
 
   public Intern updateProfile(
-    Users users,
-    Intern intern,
-    String name,
-    String fonction
-  ) {
+      Users users,
+      Intern intern,
+      String name,
+      String fonction) {
     users.setName(name);
     usersRepository.save(users);
     intern.setFonction(fonction);
