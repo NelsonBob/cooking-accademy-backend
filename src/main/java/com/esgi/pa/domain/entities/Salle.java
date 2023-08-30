@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Entité représentant un cours de cuisine
+ * Entité représentant une salle
  */
 @Data
 @Builder

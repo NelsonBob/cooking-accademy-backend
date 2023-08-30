@@ -1,4 +1,4 @@
-package com.esgi.pa.api.dtos.requests.salle;
+package com.esgi.pa.api.dtos.requests.gallerie;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 

@@ -2,6 +2,7 @@ package com.esgi.pa.api.mappers;
 
 import java.util.List;
 
+import com.esgi.pa.api.dtos.responses.categorieMateriel.GetCategorieMaterielItemResponse;
 import com.esgi.pa.api.dtos.responses.categorieMateriel.GetCategorieMaterielResponse;
 import com.esgi.pa.domain.entities.CategorieMateriel;
 
@@ -16,6 +17,13 @@ public interface CategorieMaterielMapper {
         categorieMateriel.getId(),
         categorieMateriel.getName(),
         InternMapper.toGetInternResponse(categorieMateriel.getCreator()));
+  }
+
+  static GetCategorieMaterielItemResponse toGetCategorieMaterielItemResponse(
+      CategorieMateriel categorieMateriel) {
+    return new GetCategorieMaterielItemResponse(
+        categorieMateriel.getId(),
+        categorieMateriel.getName());
   }
 
   static List<GetCategorieMaterielResponse> toGetCategorieMaterielResponse(

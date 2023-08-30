@@ -31,11 +31,11 @@ public class Materiel {
     private Long id;
     private String name;
     @Column(columnDefinition = "text")
-    private String descritpion;
+    private String description;
     private Integer quantity;
     private Float price;
     private String imgPath;
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "text")
     private String gallerie;
     @ManyToOne
     @JoinColumn(name = "categorieMateriel_id", referencedColumnName = "id")
@@ -44,4 +44,5 @@ public class Materiel {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private Intern creator;
+    private Boolean status;
 }

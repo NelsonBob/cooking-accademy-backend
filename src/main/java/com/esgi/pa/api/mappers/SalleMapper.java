@@ -7,27 +7,27 @@ import com.esgi.pa.api.dtos.responses.salle.GetSalleResponse;
 import com.esgi.pa.domain.entities.Salle;
 
 /**
- * Contient les méthodes pour mapper les entités utilisateur du domain vers des dtos
+ * Contient les méthodes pour mapper les entités utilisateur du domain vers des
+ * dtos
  */
 public interface SalleMapper {
   static GetSalleResponse toGetSalleResponse(Salle salle) {
     return new GetSalleResponse(
-      salle.getId(),
-      salle.getName(),
-      salle.getDescription(),
-      salle.getImgPath(),
-      salle.getStatus(),
-      convertToEntityAttribute(salle.getGallerie()),
-      InternMapper.toGetInternResponse(salle.getCreator())
-    );
+        salle.getId(),
+        salle.getName(),
+        salle.getDescription(),
+        salle.getImgPath(),
+        salle.getStatus(),
+        convertToEntityAttribute(salle.getGallerie()),
+        InternMapper.toGetInternResponse(salle.getCreator()));
   }
 
   static List<GetSalleResponse> toGetSalleResponse(List<Salle> entities) {
     return entities
-      .stream()
-      .map(SalleMapper::toGetSalleResponse)
-      .distinct()
-      .toList();
+        .stream()
+        .map(SalleMapper::toGetSalleResponse)
+        .distinct()
+        .toList();
   }
 
   static String[] convertToEntityAttribute(String dbData) {
@@ -43,7 +43,6 @@ public interface SalleMapper {
       elements[i] = elements[i].trim(); // Remove leading/trailing spaces
     }
 
-    System.out.println(Arrays.toString(elements));
     return elements;
   }
 }

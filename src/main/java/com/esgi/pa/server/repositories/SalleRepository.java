@@ -11,6 +11,7 @@ import com.esgi.pa.domain.entities.Salle;
  * Interface de persistence pour les Cours
  */
 public interface SalleRepository extends JpaRepository<Salle, Long> {
- Optional<Salle> findByName(String name);
+    Optional<Salle> findByName(String name);
+
     List<Salle> findByStatus(Boolean status);
 }

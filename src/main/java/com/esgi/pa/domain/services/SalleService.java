@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.esgi.pa.api.dtos.requests.salle.GallerieRequest;
+import com.esgi.pa.api.dtos.requests.gallerie.GallerieRequest;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Salle;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;

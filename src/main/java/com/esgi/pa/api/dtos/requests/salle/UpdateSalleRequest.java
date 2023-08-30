@@ -4,6 +4,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 import java.util.List;
 
+import com.esgi.pa.api.dtos.requests.gallerie.GallerieRequest;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
