@@ -40,7 +40,7 @@ public class InternService {
         .findByUsers(user)
         .orElseThrow(() -> new TechnicalNotFoundException(
             HttpStatus.NOT_FOUND,
-            "No inter found with following id : "));
+            "No inter found"));
   }
 
   public List<Intern> findTop4Chefs() {
@@ -52,7 +52,7 @@ public class InternService {
         .findById(id)
         .orElseThrow(() -> new TechnicalNotFoundException(
             HttpStatus.NOT_FOUND,
-            "No inter found with following id : "));
+            "No inter found with following id : "+id));
   }
 
   public boolean doesExistForUsers(Users users) {

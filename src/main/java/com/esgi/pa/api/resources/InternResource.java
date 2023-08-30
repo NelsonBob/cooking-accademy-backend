@@ -52,108 +52,95 @@ public class InternResource {
   /**
    * Récupère un intern par son id
    *
-   * @param id id numérique de l'utilisateur
+   * @param id       id numérique de l'utilisateur
    * @param idintern id numérique de l'utilisateur
    * @return informations relative à l'utilisateur
-   * @throws TechnicalNotFoundException si l'utilisateur n'est pas trouvé
+   * @throws TechnicalNotFoundException         si l'utilisateur n'est pas trouvé
    * @throws NotAuthorizationRessourceException
    */
   @GetMapping("{id}/id/{idintern}")
   public GetInternResponse getInternById(
-    @PathVariable Long id,
-    @PathVariable Long idintern
-  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      @PathVariable Long id,
+      @PathVariable Long idintern) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      Intern intern1 = internService.getByIdIntern(idintern);
+      Users users1 = userService.getById(idintern);
+      Intern intern1 = internService.getById(users1);
       return InternMapper.toGetInternResponse(intern1);
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @PostMapping(value = "create/{id}")
   @ResponseStatus(CREATED)
   public GetInternResponse createIntern(
-    @Valid @RequestBody CreateInternRequest request,
-    @PathVariable Long id
-  )
-    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
+      @Valid @RequestBody CreateInternRequest request,
+      @PathVariable Long id)
+      throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       Intern intern = internService.create(
-        request.name(),
-        request.email(),
-        request.password(),
-        request.role(),
-        request.fonction()
-      );
+          request.name(),
+          request.email(),
+          request.password(),
+          request.role(),
+          request.fonction());
       return InternMapper.toGetInternResponse(intern);
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @PutMapping(value = "{id}")
   @ResponseStatus(OK)
   public GetInternResponse updateProfile(
-    @Valid @RequestBody UpdateProfileRequest request,
-    @PathVariable Long id
-  ) throws TechnicalNotFoundException {
+      @Valid @RequestBody UpdateProfileRequest request,
+      @PathVariable Long id) throws TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
     Intern intern1 = internService.updateProfile(
-      users,
-      intern,
-      request.name(),
-      request.fonction()
-    );
+        users,
+        intern,
+        request.name(),
+        request.fonction());
     return InternMapper.toGetInternResponse(intern1);
   }
 
   @PutMapping(value = "update/{id}")
   @ResponseStatus(OK)
   public GetInternResponse updateIntern(
-    @Valid @RequestBody UpdateInternRequest request,
-    @PathVariable Long id
-  )
-    throws TechnicalNotFoundException, TechnicalFoundException, NotAuthorizationRessourceException {
+      @Valid @RequestBody UpdateInternRequest request,
+      @PathVariable Long id)
+      throws TechnicalNotFoundException, TechnicalFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       Intern intern2 = internService.getByIdIntern(request.id());
 
       Intern intern1 = internService.update(
-        intern2,
-        request.name(),
-        request.email(),
-        request.role(),
-        request.fonction()
-      );
+          intern2,
+          request.name(),
+          request.email(),
+          request.role(),
+          request.fonction());
       return InternMapper.toGetInternResponse(intern1);
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
   @GetMapping("list/{id}")
   public List<GetInternResponse> getInternAll(@PathVariable Long id)
-    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      if (
-        UtilService.isGranted(users.getRole(), Arrays.asList(RoleEnum.Admin))
-      ) {
+      if (UtilService.isGranted(users.getRole(), Arrays.asList(RoleEnum.Admin))) {
         return InternMapper.toGetInternResponse(internService.findAll());
-      }
-      else throw new NotAuthorizationRessourceException(
-        "Vous n'etes pas authorisé à accéder à cette ressource"
-      );
-    }
-    else throw new NotAuthorizationRessourceException(
-      "Vous n'etes pas authorisé à accéder à cette ressource"
-    );
+      } else
+        throw new NotAuthorizationRessourceException(
+            "Vous n'etes pas authorisé à accéder à cette ressource");
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 }
