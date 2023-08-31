@@ -66,6 +66,7 @@ public class SecurityConfig {
       .authorizeHttpRequests()
       .antMatchers(
         "/auth/**",
+        "/files/**",
         "/v2/**",
         "/swagger-ui/*",
         "/swagger-ui.html",

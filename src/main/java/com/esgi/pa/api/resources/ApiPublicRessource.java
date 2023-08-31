@@ -12,18 +12,21 @@ import com.esgi.pa.api.dtos.responses.intern.GetInternResponse;
 import com.esgi.pa.api.dtos.responses.materiel.GetMaterielResponse;
 import com.esgi.pa.api.dtos.responses.optionAbonnement.GetOptionAbonnementResponse;
 import com.esgi.pa.api.dtos.responses.repas.GetRepasResponse;
+import com.esgi.pa.api.dtos.responses.salle.GetSalleResponse;
 import com.esgi.pa.api.dtos.responses.serviceAbonnement.GetServiceAbonnementResponse;
 import com.esgi.pa.api.mappers.CourMapper;
 import com.esgi.pa.api.mappers.InternMapper;
 import com.esgi.pa.api.mappers.MaterielMapper;
 import com.esgi.pa.api.mappers.OptionAbonnementMapper;
 import com.esgi.pa.api.mappers.RepasMapper;
+import com.esgi.pa.api.mappers.SalleMapper;
 import com.esgi.pa.api.mappers.ServiceAbonnementMapper;
 import com.esgi.pa.domain.services.CourService;
 import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.MaterielService;
 import com.esgi.pa.domain.services.OptionAbonnementService;
 import com.esgi.pa.domain.services.RepasService;
+import com.esgi.pa.domain.services.SalleService;
 import com.esgi.pa.domain.services.ServiceAbonnementService;
 
 import io.swagger.annotations.Api;
@@ -44,6 +47,7 @@ public class ApiPublicRessource {
     private final MaterielService materielService;
     private final RepasService repasService;
     private final InternService internService;
+    private final SalleService salleService;
 
     @GetMapping("cours")
     public List<GetCourResponse> getCoursActif() {
@@ -78,5 +82,11 @@ public class ApiPublicRessource {
     public List<GetInternResponse> getInternActif() {
         return InternMapper.toGetInternResponse(
                 internService.findTop4Chefs());
+    }
+
+    @GetMapping("salles")
+    public List<GetSalleResponse> getSalleActif() {
+        return SalleMapper.toGetSalleResponse(
+            salleService.findByStatus());
     }
 }
