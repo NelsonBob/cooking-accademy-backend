@@ -120,11 +120,12 @@ public class AuthService {
               "role",
               users.getRole(),
               "picture",
-              users.getImgPath(),
+              users.getImgPath() != null ? users.getImgPath() : "",
               "adress",
               client.getAdress()),
           users);
     } else {
+      System.out.println("intern");
       Intern intern = internRepository
           .findByUsers(users)
           .orElseThrow(() -> new TechnicalNotFoundException(
@@ -139,7 +140,7 @@ public class AuthService {
               "role",
               users.getRole(),
               "picture",
-              users.getImgPath(),
+              users.getImgPath() != null ? users.getImgPath() : "",
               "fonction",
               intern.getFonction()),
           users);
