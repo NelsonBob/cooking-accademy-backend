@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,7 @@ import com.esgi.pa.api.mappers.OptionAbonnementMapper;
 import com.esgi.pa.api.mappers.RepasMapper;
 import com.esgi.pa.api.mappers.SalleMapper;
 import com.esgi.pa.api.mappers.ServiceAbonnementMapper;
+import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.CourService;
 import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.MaterielService;
@@ -87,6 +89,12 @@ public class ApiPublicRessource {
     @GetMapping("salles")
     public List<GetSalleResponse> getSalleActif() {
         return SalleMapper.toGetSalleResponse(
-            salleService.findByStatus());
+                salleService.findByStatus());
+    }
+
+    @GetMapping("salles/{idk}")
+    public GetSalleResponse getSalleById(
+            @PathVariable Long idk) throws TechnicalNotFoundException {
+        return SalleMapper.toGetSalleResponse(salleService.getById(idk));
     }
 }

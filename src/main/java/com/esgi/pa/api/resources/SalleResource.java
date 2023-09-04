@@ -62,18 +62,6 @@ public class SalleResource {
           "Vous n'etes pas authorisé à accéder à cette ressource");
   }
 
-  @GetMapping("{id}/id/{idk}")
-  public GetSalleResponse getSalleById(
-      @PathVariable Long id,
-      @PathVariable Long idk) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
-    Users users = userService.getById(id);
-    if (internService.doesExistForUsers(users)) {
-      return SalleMapper.toGetSalleResponse(salleService.getById(idk));
-    } else
-      throw new NotAuthorizationRessourceException(
-          "Vous n'etes pas authorisé à accéder à cette ressource");
-  }
-
   @GetMapping("actif/{id}")
   public List<GetSalleResponse> getSallesActif(@PathVariable Long id)
       throws TechnicalNotFoundException, NotAuthorizationRessourceException {
