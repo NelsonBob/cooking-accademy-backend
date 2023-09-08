@@ -54,4 +54,9 @@ public class EventService {
     public void delete(Event event) {
         eventRepository.delete(event);
     }
+
+    public List<Event> findEventList(Users creator) {
+        return eventRepository.findByCreator(creator);
+    }
+
 }

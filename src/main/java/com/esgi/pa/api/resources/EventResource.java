@@ -3,12 +3,14 @@ package com.esgi.pa.api.resources;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,12 +23,14 @@ import com.esgi.pa.api.dtos.responses.event.GetEventResponse;
 import com.esgi.pa.api.mappers.EventMapper;
 import com.esgi.pa.domain.entities.Event;
 import com.esgi.pa.domain.entities.Users;
+import com.esgi.pa.domain.enums.RoleEnum;
 import com.esgi.pa.domain.enums.TypeEventEnum;
 import com.esgi.pa.domain.exceptions.NotAuthorizationRessourceException;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.EventService;
 import com.esgi.pa.domain.services.UserService;
+import com.esgi.pa.domain.services.util.UtilService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.annotations.Api;
@@ -59,6 +63,18 @@ public class EventResource {
         request.end(),
         request.elementId());
     return EventMapper.toGetEventResponse(eventService.findEvent(TypeEventEnum.Reservation, request.elementId()));
+  }
+
+  @GetMapping(value = "{id}")
+  @ResponseStatus(OK)
+  public List<GetEventResponse> listAllEvent(@PathVariable Long id)
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+    Users users = userService.getById(id);
+    if (UtilService.isGranted(users.getRole(), Arrays.asList(RoleEnum.Admin)))
+      return EventMapper.toGetEventResponse(eventService.findAll());
+    else
+      return EventMapper.toGetEventResponse(eventService.findEventList(users));
+
   }
 
   @DeleteMapping(value = "{idk}/element/{id}")
