@@ -11,13 +11,16 @@ import com.esgi.pa.domain.entities.Intern;
  */
 public interface InternMapper {
   static GetInternResponse toGetInternResponse(Intern intern) {
-    return new GetInternResponse(
-        intern.getUsers().getId(),
-        intern.getUsers().getName(),
-        intern.getUsers().getEmail(),
-        intern.getUsers().getRole(),
-        intern.getFonction(),
-        intern.getUsers().getImgPath());
+    if (intern != null)
+      return new GetInternResponse(
+          intern.getUsers().getId(),
+          intern.getUsers().getName(),
+          intern.getUsers().getEmail(),
+          intern.getUsers().getRole(),
+          intern.getFonction(),
+          intern.getUsers().getImgPath());
+    else
+      return null;
   }
 
   static List<GetInternResponse> toGetInternResponse(List<Intern> entities) {

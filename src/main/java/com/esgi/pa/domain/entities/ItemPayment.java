@@ -30,6 +30,7 @@ public class ItemPayment {
     private Integer itemTotal;
     private Integer quantity;
     private TypeCommandeEnum type;
+    private String name;
     @ManyToOne
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     private Payment payment;

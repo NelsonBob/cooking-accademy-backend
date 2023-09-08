@@ -132,4 +132,8 @@ public class InternService {
   public List<Intern> findAll() {
     return internRepository.findAll();
   }
+
+  public List<Intern> listLivreur(RoleEnum roleEnum) {
+    return internRepository.findByUsersRole(roleEnum);
+}
 }

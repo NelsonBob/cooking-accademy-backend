@@ -143,4 +143,20 @@ public class InternResource {
       throw new NotAuthorizationRessourceException(
           "Vous n'etes pas authorisé à accéder à cette ressource");
   }
+
+  @GetMapping("livreur/{id}")
+  public List<GetInternResponse> getLivreurAll(@PathVariable Long id)
+      throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+    Users users = userService.getById(id);
+    if (internService.doesExistForUsers(users)) {
+      if (UtilService.isGranted(users.getRole(), Arrays.asList(RoleEnum.Admin))) {
+        return InternMapper.toGetInternResponse(internService.listLivreur(RoleEnum.Livreur));
+      } else
+        throw new NotAuthorizationRessourceException(
+            "Vous n'etes pas authorisé à accéder à cette ressource");
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
+  }
+
 }

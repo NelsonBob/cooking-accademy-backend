@@ -18,4 +18,5 @@ public interface InternRepository extends JpaRepository<Intern, Long> {
     boolean existsByUsers(Users users);
 
     List<Intern> findTop4ByUsersRole(RoleEnum role);
+    List<Intern> findByUsersRole(RoleEnum role);
 }

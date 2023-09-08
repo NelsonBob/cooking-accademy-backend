@@ -17,6 +17,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -26,11 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.esgi.pa.api.dtos.requests.stripe.ItemsRequest;
 import com.esgi.pa.api.dtos.requests.stripe.ReceiptPaymentRequest;
+import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.ItemPayment;
 import com.esgi.pa.domain.entities.Payment;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.StatusCommandeEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
+import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.ItemPaymentRepository;
 import com.esgi.pa.server.repositories.PaymentRepository;
 
@@ -106,7 +109,7 @@ public class PaymentService {
                     .itemTotal(el.itemTotal())
                     .payment(payment)
                     .type(el.type())
-
+                    .name(el.name())
                     .build());
         });
         // Send the receipt to the client via email
@@ -189,5 +192,32 @@ public class PaymentService {
 
     public List<Payment> findAll() {
         return paymentRepository.findAll();
+    }
+
+    public List<Payment> listPaymentLivreur(Intern livreur) {
+        return paymentRepository.findByLivreur(livreur);
+    }
+
+    public List<Payment> listPaymentUser(Users users) {
+        return paymentRepository.findByUsers(users);
+    }
+
+    public Payment getById(Long id) throws TechnicalNotFoundException {
+        return paymentRepository
+                .findById(id)
+                .orElseThrow(() -> new TechnicalNotFoundException(
+                        HttpStatus.NOT_FOUND,
+                        "No payment found with following id : " + id));
+    }
+
+    public void assignLivreur(Intern intern, Payment payment) throws TechnicalNotFoundException {
+        payment.setLivreur(intern);
+        paymentRepository.save(payment);
+    }
+
+    public void validateLivraison(StatusCommandeEnum statusCommandeEnum, Payment payment)
+            throws TechnicalNotFoundException {
+        payment.setStatusCommande(statusCommandeEnum);
+        paymentRepository.save(payment);
     }
 }
