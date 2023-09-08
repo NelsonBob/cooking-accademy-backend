@@ -37,7 +37,7 @@ public class Intern {
   private Long id;
 
   private String fonction;
-  
+
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
   @JsonIgnoreProperties({ "users" })
@@ -73,5 +73,5 @@ public class Intern {
 
   @Builder.Default
   @OneToMany(mappedBy = "livreur", fetch = FetchType.LAZY)
-  private List<Commande> commandes = new ArrayList<>();
+  private List<Payment> commandes = new ArrayList<>();
 }

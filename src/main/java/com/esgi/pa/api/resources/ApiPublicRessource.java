@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.esgi.pa.api.dtos.responses.cour.GetCourResponse;
+import com.esgi.pa.api.dtos.responses.event.GetEventResponse;
 import com.esgi.pa.api.dtos.responses.intern.GetInternResponse;
 import com.esgi.pa.api.dtos.responses.materiel.GetMaterielResponse;
 import com.esgi.pa.api.dtos.responses.optionAbonnement.GetOptionAbonnementResponse;
@@ -16,14 +17,17 @@ import com.esgi.pa.api.dtos.responses.repas.GetRepasResponse;
 import com.esgi.pa.api.dtos.responses.salle.GetSalleResponse;
 import com.esgi.pa.api.dtos.responses.serviceAbonnement.GetServiceAbonnementResponse;
 import com.esgi.pa.api.mappers.CourMapper;
+import com.esgi.pa.api.mappers.EventMapper;
 import com.esgi.pa.api.mappers.InternMapper;
 import com.esgi.pa.api.mappers.MaterielMapper;
 import com.esgi.pa.api.mappers.OptionAbonnementMapper;
 import com.esgi.pa.api.mappers.RepasMapper;
 import com.esgi.pa.api.mappers.SalleMapper;
 import com.esgi.pa.api.mappers.ServiceAbonnementMapper;
+import com.esgi.pa.domain.enums.TypeEventEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.CourService;
+import com.esgi.pa.domain.services.EventService;
 import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.MaterielService;
 import com.esgi.pa.domain.services.OptionAbonnementService;
@@ -50,6 +54,7 @@ public class ApiPublicRessource {
     private final RepasService repasService;
     private final InternService internService;
     private final SalleService salleService;
+    private final EventService eventService;
 
     @GetMapping("cours")
     public List<GetCourResponse> getCoursActif() {
@@ -96,5 +101,11 @@ public class ApiPublicRessource {
     public GetSalleResponse getSalleById(
             @PathVariable Long idk) throws TechnicalNotFoundException {
         return SalleMapper.toGetSalleResponse(salleService.getById(idk));
+    }
+
+    @GetMapping("events/{type}/element/{id}")
+    public List<GetEventResponse> getEvent(@PathVariable TypeEventEnum type, @PathVariable Long id) {
+        return EventMapper.toGetEventResponse(eventService.findEvent(type, id));
+
     }
 }

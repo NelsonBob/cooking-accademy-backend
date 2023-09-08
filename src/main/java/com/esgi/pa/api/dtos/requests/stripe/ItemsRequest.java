@@ -10,9 +10,10 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record ItemsRequest(
-  @NotBlank(message = "price is required") Long id,
+  @NotBlank(message = "id is required") Long id,
+  @NotBlank(message = "name is required") String name,
   @NotBlank(message = "price is required") Integer price,
-  @NotBlank(message = "price is required") Integer itemTotal,
-  @NotBlank(message = "price is required") Integer quantity,
-  @NotBlank(message = "price is required") TypeCommandeEnum type
+  @NotBlank(message = "itemTotal is required") Integer itemTotal,
+  @NotBlank(message = "quantity is required") Integer quantity,
+  @NotBlank(message = "type is required") TypeCommandeEnum type
 ) {}

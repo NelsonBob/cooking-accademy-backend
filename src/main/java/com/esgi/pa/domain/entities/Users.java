@@ -1,5 +1,6 @@
 package com.esgi.pa.domain.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -7,9 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -46,6 +49,16 @@ public class Users implements UserDetails {
   @With
   @Enumerated(EnumType.STRING)
   private RoleEnum role;
+  @Builder.Default
+  @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+  private List<Payment> payments = new ArrayList<>();
+  @Builder.Default
+  @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+  private List<Event> events = new ArrayList<>();
+  @Builder.Default
+  @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+  private List<EventUsers> eventUsers = new ArrayList<>();
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.name()));

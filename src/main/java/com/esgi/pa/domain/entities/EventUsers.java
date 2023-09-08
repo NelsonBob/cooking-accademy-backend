@@ -1,40 +1,35 @@
 package com.esgi.pa.domain.entities;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Entité représentant les informations d'un Formateur
- */
 @Data
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "clients")
-public class Client {
+@Table(name = "event_users")
+public class EventUsers {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String adress;
-    private Integer nbVideoDay;
-    private LocalDateTime videoDay;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private Users users;
-
+    @ManyToOne
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    private Event event;
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({ "creator" })
+    private Users creator;
 }
