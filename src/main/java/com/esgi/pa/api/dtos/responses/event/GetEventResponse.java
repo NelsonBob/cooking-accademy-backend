@@ -11,5 +11,6 @@ public record GetEventResponse(
                 String title,
                 String start,
                 String end,
-                GetUserResponse user) {
+                GetUserResponse user,
+                String imgPath) {
 }

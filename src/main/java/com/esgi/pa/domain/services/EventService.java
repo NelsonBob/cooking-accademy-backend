@@ -23,7 +23,7 @@ public class EventService {
     private final EventUsersRepository eventUsersRepository;
 
     public void createReservation(Users users, String title,
-            String start, String end, long elementId)
+            String start, String end, long elementId, String imgPath)
             throws TechnicalFoundException {
         eventRepository.save(Event.builder()
                 .title(title)
@@ -32,6 +32,7 @@ public class EventService {
                 .elementId(elementId)
                 .creator(users)
                 .typeEventEnum(TypeEventEnum.Reservation)
+                .imgPath(imgPath)
                 .build());
     }
 
@@ -41,6 +42,10 @@ public class EventService {
 
     public List<Event> findEvent(TypeEventEnum typeEventEnum, Long elementId) {
         return eventRepository.findByTypeEventEnumAndElementId(typeEventEnum, elementId);
+    }
+
+    public List<Event> findEventAll(TypeEventEnum typeEventEnum) {
+        return eventRepository.findByTypeEventEnumIsNot(typeEventEnum);
     }
 
     public Event getById(Long id) throws TechnicalNotFoundException {

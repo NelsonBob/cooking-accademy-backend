@@ -10,6 +10,8 @@ import com.esgi.pa.domain.enums.TypeEventEnum;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByTypeEventEnumAndElementId(TypeEventEnum typeEventEnum, long elementId);
+    
+    List<Event> findByTypeEventEnumIsNot(TypeEventEnum typeEventEnum);
 
     List<Event> findByCreator(Users creator);
 }

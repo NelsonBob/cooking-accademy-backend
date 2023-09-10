@@ -37,6 +37,7 @@ public class Event {
     private String start;
     private String end;
     private long elementId;// si c'est un planning de cour c'est id du cour
+    private String imgPath;
     @With
     @Enumerated(EnumType.STRING)
     private TypeEventEnum typeEventEnum;

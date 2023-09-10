@@ -15,5 +15,6 @@ public record CreateEventRequest(
         @NotBlank(message = "title is required") String title,
         @NotBlank(message = "start is required") String start,
         @NotBlank(message = "end is required") String end,
+        @NotBlank(message = "imgPath is required") String imgPath,
         @NotNull(message = "elementId is required") long elementId) {
 }

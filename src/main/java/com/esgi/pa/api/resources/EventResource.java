@@ -61,12 +61,12 @@ public class EventResource {
         request.title(),
         request.start(),
         request.end(),
-        request.elementId());
+        request.elementId(),
+        request.imgPath());
     return EventMapper.toGetEventResponse(eventService.findEvent(TypeEventEnum.Reservation, request.elementId()));
   }
 
-  @GetMapping(value = "{id}")
-  @ResponseStatus(OK)
+  @GetMapping("{id}")
   public List<GetEventResponse> listAllEvent(@PathVariable Long id)
       throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);

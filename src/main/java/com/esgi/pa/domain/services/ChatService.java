@@ -1,9 +1,7 @@
 package com.esgi.pa.domain.services;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -65,9 +63,8 @@ public class ChatService {
      * @param receiveMessageInCourResponses information relative au message envoyé
      * @return les messages par cour
      */
-    public Map<Long, List<SendMessageInCourRequest>> chatCourResponse(Optional<Chat> chat,
+    public List<SendMessageInCourRequest> chatCourResponse(Optional<Chat> chat,
             List<ReceiveMessageInCourResponse> receiveMessageInCourResponses) {
-        Map<Long, List<SendMessageInCourRequest>> privateChats = new HashMap<>();
         List<SendMessageInCourRequest> messages = new ArrayList<>();
 
         receiveMessageInCourResponses.forEach(message -> messages.add(
@@ -79,8 +76,7 @@ public class ChatService {
                         chat.get().getCour().getCreator().getUsers().getName(),
                         StatusMessageEnum.JOIN,
                         message.currentDate())));
-        privateChats.put(chat.get().getCour().getId(), messages);
-        return privateChats;
+        return messages;
     }
 
 }

@@ -108,4 +108,9 @@ public class ApiPublicRessource {
         return EventMapper.toGetEventResponse(eventService.findEvent(type, id));
 
     }
+
+    @GetMapping("events")
+    public List<GetEventResponse> getEventAll() {
+        return EventMapper.toGetEventResponse(eventService.findEventAll(TypeEventEnum.Materiel));
+    }
 }

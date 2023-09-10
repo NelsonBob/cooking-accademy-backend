@@ -1,7 +1,6 @@
 package com.esgi.pa.api.resources;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,10 +12,13 @@ import com.esgi.pa.api.dtos.requests.message.SendMessageInCourRequest;
 import com.esgi.pa.api.mappers.MessageMapper;
 import com.esgi.pa.domain.entities.Chat;
 import com.esgi.pa.domain.entities.Cour;
+import com.esgi.pa.domain.entities.Intern;
+import com.esgi.pa.domain.entities.Message;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.ChatService;
 import com.esgi.pa.domain.services.CourService;
+import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.MessageService;
 import com.esgi.pa.domain.services.UserService;
 
@@ -29,6 +31,7 @@ public class WebsocketResource {
     private final MessageService messageService;
     private final ChatService chatService;
     private final CourService courService;
+    private final InternService internService;
 
     /**
      * Permet le traitement des messages de cours
@@ -39,13 +42,31 @@ public class WebsocketResource {
      */
     @MessageMapping("/message")
     @SendTo("/chat/cour")
-    public Map<Long, List<SendMessageInCourRequest>> processCourMessage(
+    public List<SendMessageInCourRequest> processCourMessage(
             SendMessageInCourRequest message) throws TechnicalNotFoundException {
         Cour cour = courService.getById(message.cour());
         Optional<Chat> chat = chatService.findChatByCourWithMessages(cour);
         return chatService.chatCourResponse(
                 chat,
                 MessageMapper.toGetmessageResponse(chat.get().getMessages()));
+    }
+
+    /**
+     * Permet le traitement des messages de cours
+     *
+     * @param message les informations relative au message
+     * @return id cours et leurs messages
+     * @throws TechnicalNotFoundException si un élément n'est pas trouvé
+     */
+    @MessageMapping("/notification")
+    @SendTo("/chat/notification")
+    public List<SendMessageInCourRequest> processMessageFormator(
+            SendMessageInCourRequest message) throws TechnicalNotFoundException {
+        Users users = userService.getById(message.senderUser());
+        Intern intern = internService.getById(users);
+        Cour cour = courService.getById(message.cour());
+        List<Message> messages = messageService.findMessageIntern(users, intern, cour);
+        return messageService.messageCourResponse(messages);
     }
 
     /**

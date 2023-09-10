@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.esgi.pa.domain.enums.StatusMessageEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,11 +44,6 @@ public class Message {
 
     private String sentAt;
 
-    public Message(Chat chat, Users creator, String content, String sentAt) {
-        this.chat = chat;
-        this.creator = creator;
-        this.content = content;
-        this.sentAt = sentAt;
-    }
+    private StatusMessageEnum status;
 
 }
