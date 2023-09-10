@@ -119,8 +119,8 @@ public class PaymentService {
     public String saveReceiptToPdf(String receiptContent, ReceiptPaymentRequest paymentRequest, Users users)
             throws IOException, TechnicalFoundException {
         // Create a unique file name for the PDF receipt
-        String fileName = "receipt_" + UUID.randomUUID().toString();
-        String filePath = UPLOAD_DIR + fileName + ".pdf";
+        String fileName = "receipt_" + UUID.randomUUID().toString() + ".pdf";
+        String filePath = UPLOAD_DIR + fileName;
 
         try (PDDocument document = new PDDocument()) { // Initialize the document variable
             PDPage page = new PDPage();

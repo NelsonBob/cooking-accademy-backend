@@ -61,6 +61,7 @@ public class FileResource {
    */
   @GetMapping("/download/{fileName}")
   public ResponseEntity<byte[]> downloadFile(@PathVariable String fileName) {
+    System.out.println(UPLOAD_DIR + fileName+" ffffffffffffff");
     try {
       Path filePath = Paths.get(UPLOAD_DIR + fileName);
       Resource resource = new UrlResource(filePath.toUri());
