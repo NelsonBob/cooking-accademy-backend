@@ -7,8 +7,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = ANY)
 public record GetUserResponse(
-    Long id,
-    String name,
-    String email,
-    RoleEnum role) {
+        Long id,
+        String name,
+        String email,
+        RoleEnum role,
+        String imgPath) {
 }

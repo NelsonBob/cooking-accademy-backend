@@ -7,7 +7,8 @@ import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
 import com.esgi.pa.domain.entities.Users;
 
 /**
- * Contient les méthodes pour mapper les entités utilisateur du domain vers des dtos
+ * Contient les méthodes pour mapper les entités utilisateur du domain vers des
+ * dtos
  */
 public interface UserMapper {
 
@@ -16,13 +17,15 @@ public interface UserMapper {
                 users.getId(),
                 users.getName(),
                 users.getEmail(),
-                users.getRole());
+                users.getRole(),
+                users.getImgPath() != null ? users.getImgPath() : "");
     }
+
     static List<GetUserResponse> toGetUserResponse(List<Users> entities) {
         return entities.stream()
-            .map(UserMapper::toGetUserResponse)
-            .distinct()
-            .toList();
+                .map(UserMapper::toGetUserResponse)
+                .distinct()
+                .toList();
     }
 
     static AuthenticationUserResponse toAuthenticationUserResponse(String token) {

@@ -10,6 +10,8 @@ import com.esgi.pa.domain.entities.Message;
 import com.esgi.pa.domain.entities.Users;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findByChatCourAndCreatorOrChatCourCreatorOrderByIdDesc(Cour cour,Users sender, Intern receive);
+    List<Message> findByChatCourAndCreatorOrChatCourCreatorOrderByIdDesc(Cour cour, Users sender, Intern receive);
+
+    List<Message> findDistinctCreatorByChatCourAndCreatorIsNotOrderByIdDesc(Cour cour, Users sender);
 
 }
