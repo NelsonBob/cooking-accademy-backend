@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.esgi.pa.domain.entities.Event;
+import com.esgi.pa.domain.entities.Evenement;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.TypeEventEnum;
 
-public interface EventRepository extends JpaRepository<Event, Long> {
-    List<Event> findByTypeEventEnumAndElementId(TypeEventEnum typeEventEnum, long elementId);
+public interface EventRepository extends JpaRepository<Evenement, Long> {
+    List<Evenement> findByTypeEventEnumAndElementId(TypeEventEnum typeEventEnum, long elementId);
     
-    List<Event> findByTypeEventEnumIsNot(TypeEventEnum typeEventEnum);
+    List<Evenement> findByTypeEventEnumIsNot(TypeEventEnum typeEventEnum);
 
-    List<Event> findByCreator(Users creator);
+    List<Evenement> findByusers(Users creator);
 }

@@ -1,30 +1,30 @@
 package com.esgi.pa.api.mappers;
 
+import com.esgi.pa.api.dtos.responses.event.GetEventResponse;
+import com.esgi.pa.domain.entities.Evenement;
 import java.util.List;
 
-import com.esgi.pa.api.dtos.responses.event.GetEventResponse;
-import com.esgi.pa.domain.entities.Event;
-
 public interface EventMapper {
-  static GetEventResponse toGetEventResponse(Event event) {
+  static GetEventResponse toGetEventResponse(Evenement event) {
     String im = "";
-    if (event.getImgPath() != "")
-      im = event.getImgPath();
+    if (event.getImgPath() != "") im = event.getImgPath();
     return new GetEventResponse(
-        event.getId(),
-        event.getTitle(),
-        event.getStart(),
-        event.getEnd(),
-        UserMapper.toGetUserResponse(event.getCreator()),
-        im);
+      event.getId(),
+      event.getTitle(),
+      event.getStartDate(),
+      event.getEndDate(),
+      UserMapper.toGetUserResponse(event.getUsers()),
+      im,
+      event.getStatusEvent(),
+      event.getTypeEventEnum()
+    );
   }
 
-  static List<GetEventResponse> toGetEventResponse(List<Event> entities) {
+  static List<GetEventResponse> toGetEventResponse(List<Evenement> entities) {
     return entities
-        .stream()
-        .map(EventMapper::toGetEventResponse)
-        .distinct()
-        .toList();
+      .stream()
+      .map(EventMapper::toGetEventResponse)
+      .distinct()
+      .toList();
   }
-
 }

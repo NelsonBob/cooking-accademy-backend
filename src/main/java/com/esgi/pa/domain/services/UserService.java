@@ -1,16 +1,13 @@
 package com.esgi.pa.domain.services;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.RoleEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.UsersRepository;
-
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 /**
  * Service de gestion des utilisateurs
@@ -34,18 +31,28 @@ public class UserService {
    */
   public Users getById(Long id) throws TechnicalNotFoundException {
     return usersRepository
-        .findById(id)
-        .orElseThrow(() -> new TechnicalNotFoundException(
-            HttpStatus.NOT_FOUND,
-            "No user found with following id : " + id));
+      .findById(id)
+      .orElseThrow(() ->
+        new TechnicalNotFoundException(
+          HttpStatus.NOT_FOUND,
+          "No user found with following id : " + id
+        )
+      );
+  }
+
+  public List<Users> listUsers(Long id) throws TechnicalNotFoundException {
+    return usersRepository.findByIdIsNot(id);
   }
 
   public Users getByEmail(String email) throws TechnicalNotFoundException {
     return usersRepository
-        .findByEmail(email)
-        .orElseThrow(() -> new TechnicalNotFoundException(
-            HttpStatus.NOT_FOUND,
-            "No user found with following id : "));
+      .findByEmail(email)
+      .orElseThrow(() ->
+        new TechnicalNotFoundException(
+          HttpStatus.NOT_FOUND,
+          "No user found with following id : "
+        )
+      );
   }
 
   /**
@@ -58,11 +65,8 @@ public class UserService {
     return usersRepository.save(users);
   }
 
-  public void updatePicture(
-      Users users,
-      String imgPath) {
+  public void updatePicture(Users users, String imgPath) {
     users.setImgPath(imgPath);
     usersRepository.save(users);
   }
-
 }

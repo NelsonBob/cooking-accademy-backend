@@ -1,9 +1,9 @@
 package com.esgi.pa.domain.entities;
 
+import com.esgi.pa.domain.enums.RoleEnum;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,18 +14,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.esgi.pa.domain.enums.RoleEnum;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Entité représentant un utilisateur
@@ -37,26 +33,34 @@ import lombok.With;
 @AllArgsConstructor
 @Table(name = "users")
 public class Users implements UserDetails {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+
   @Column(unique = true)
   private String name;
+
   @Column(unique = true)
   private String email;
+
   private String password;
   private String imgPath;
+
   @With
   @Enumerated(EnumType.STRING)
   private RoleEnum role;
+
   @Builder.Default
   @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
   private List<Payment> payments = new ArrayList<>();
+
   @Builder.Default
-  @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
-  private List<Event> events = new ArrayList<>();
+  @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+  private List<Evenement> events = new ArrayList<>();
+
   @Builder.Default
-  @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
   private List<EventUsers> eventUsers = new ArrayList<>();
 
   @Override
