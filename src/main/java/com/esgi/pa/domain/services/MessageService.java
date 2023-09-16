@@ -3,6 +3,7 @@ package com.esgi.pa.domain.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -48,8 +49,9 @@ public class MessageService {
         messageRepository.save(message2);
     }
 
-    public List<Message> findMessageIntern(Users users, Intern intern,Cour cour) {
-        List<Message> list = messageRepository.findByChatCourAndCreatorOrChatCourCreatorOrderByIdDesc(cour,users, intern);
+    public List<Message> findMessageIntern(Users users, Intern intern, Cour cour) {
+        List<Message> list = messageRepository.findByChatCourAndCreatorOrChatCourCreatorOrderByIdDesc(cour, users,
+                intern);
         list.forEach(el -> {
             el.setStatus(StatusMessageEnum.MESSAGE);
             messageRepository.save(el);
@@ -70,5 +72,14 @@ public class MessageService {
                         message.getStatus(),
                         message.getSentAt())));
         return messages;
+    }
+
+    public List<Users> findListUsersByCour(Cour cour) {
+        List<Users> users = new ArrayList<>();
+        List<Message> messages = messageRepository.findDistinctCreatorByChatCourAndCreatorIsNotOrderByIdDesc(cour, cour.getCreator().getUsers());
+        for (Message message : messages) {
+            users.add(message.getCreator());
+        }
+        return users;
     }
 }

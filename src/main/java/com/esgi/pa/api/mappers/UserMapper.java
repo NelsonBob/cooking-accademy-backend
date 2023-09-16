@@ -7,7 +7,8 @@ import com.esgi.pa.domain.entities.Users;
 import java.util.List;
 
 /**
- * Contient les méthodes pour mapper les entités utilisateur du domain vers des dtos
+ * Contient les méthodes pour mapper les entités utilisateur du domain vers des
+ * dtos
  */
 public interface UserMapper {
   static GetUserResponse toGetUserResponse(Users users) {
@@ -15,7 +16,8 @@ public interface UserMapper {
       users.getId(),
       users.getName(),
       users.getEmail(),
-      users.getRole()
+      users.getRole(),
+      users.getImgPath()
     );
   }
 

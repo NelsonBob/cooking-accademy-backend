@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.esgi.pa.api.dtos.requests.cour.CreateCourRequest;
 import com.esgi.pa.api.dtos.requests.cour.UpdateCourRequest;
 import com.esgi.pa.api.dtos.responses.cour.GetCourResponse;
+import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
 import com.esgi.pa.api.mappers.CourMapper;
+import com.esgi.pa.api.mappers.UserMapper;
 import com.esgi.pa.domain.entities.Cour;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Users;
@@ -31,6 +33,7 @@ import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.CourService;
 import com.esgi.pa.domain.services.InternService;
+import com.esgi.pa.domain.services.MessageService;
 import com.esgi.pa.domain.services.UserService;
 
 import io.swagger.annotations.Api;
@@ -49,6 +52,7 @@ public class CourResource {
   private final UserService userService;
   private final InternService internService;
   private final CourService courService;
+  private final MessageService messageService;
 
   @GetMapping("{id}")
   public List<GetCourResponse> getAllCours(@PathVariable Long id)
@@ -72,7 +76,20 @@ public class CourResource {
       throw new NotAuthorizationRessourceException(
           "Vous n'etes pas authorisé à accéder à cette ressource");
   }
- 
+
+  @GetMapping("message/{id}/id/{idk}")
+  public List<GetUserResponse> getUserMessageCourById(
+      @PathVariable Long id,
+      @PathVariable Long idk) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+    Users users = userService.getById(id);
+    if (internService.doesExistForUsers(users)) {
+      List<Users> usersList = messageService.findListUsersByCour(courService.getById(idk));
+      return UserMapper.toGetUserResponse(usersList);
+    } else
+      throw new NotAuthorizationRessourceException(
+          "Vous n'etes pas authorisé à accéder à cette ressource");
+  }
+
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
   public ResponseEntity<?> create(
