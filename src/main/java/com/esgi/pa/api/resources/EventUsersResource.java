@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/event-users")
-@Api(tags = "Event API")
+@Api(tags = "Event Participant API")
 public class EventUsersResource {
 
   private final UserService userService;
