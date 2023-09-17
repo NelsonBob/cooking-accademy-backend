@@ -1,26 +1,38 @@
 package com.esgi.pa.api.mappers;
 
-import com.esgi.pa.api.dtos.responses.post.PostGetResponse;
-import com.esgi.pa.domain.entities.Post;
-
 import java.util.List;
 
+import com.esgi.pa.api.dtos.responses.post.PostGetResponse;
+import com.esgi.pa.domain.entities.Post;
+import com.esgi.pa.domain.entities.Users;
+
 public interface PostMapper {
+  static PostGetResponse toPostGetResponse(Post post, Users user) {
+    boolean userLiked = post
+      .getLikes()
+      .stream()
+      .anyMatch(like -> like.getUser().equals(user));
 
-    static PostGetResponse toPostGetResponse(Post post){
-        return new PostGetResponse(
-                post.getId(),
-                post.getUser().getId(),
-                post.getUser().getName(),
-                post.getDescription()
-        );
-    }
-    static List<PostGetResponse> toPostGetResponse(List<Post> entities){
-        return entities
-                .stream()
-                .map(PostMapper::toPostGetResponse)
-                .distinct()
-                .toList();
-    }
+    return new PostGetResponse(
+      post.getId(),
+      UserMapper.toGetUserResponse(post.getAuthor()),
+      post.getDescription(),
+      post.getImgPath(),
+      post.getDatepost(),
+      CommentMapper.toCommentGetResponse(post.getComments()),
+      post.getLikes().size(),
+      userLiked
+    );
+  }
 
+  static List<PostGetResponse> toPostGetResponse(
+    List<Post> entities,
+    Users user
+  ) {
+    return entities
+      .stream()
+      .map(post -> PostMapper.toPostGetResponse(post, user))
+      .distinct()
+      .toList();
+  }
 }

@@ -13,7 +13,6 @@ import com.esgi.pa.domain.exceptions.NotAuthorizationRessourceException;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import java.util.List;
 import javax.validation.Valid;
@@ -67,7 +66,7 @@ public class UserResource {
     @Valid @RequestBody UpdatePictureRequest request,
     @PathVariable Long id
   )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException, NotAuthorizationRessourceException {
+    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     userService.updatePicture(users, request.imgPath());
     return ResponseEntity.status(OK).build();

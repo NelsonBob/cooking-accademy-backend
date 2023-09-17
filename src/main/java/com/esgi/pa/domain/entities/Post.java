@@ -1,36 +1,65 @@
 package com.esgi.pa.domain.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
-@Setter
-@Getter
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "posts")
 public class Post {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id")
-    private Long id;
-    @NotNull
-    @Column(name = "description")
-    private String description;
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    Users user;
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
-    Set<Like> likes;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
+  private Long id;
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
-    Set<PostImage> postImages;
+  @NotNull
+  @Column(name = "description")
+  private String description;
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
-    Set<Comment> comments;
+  private String datepost;
+
+  @NotNull
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  Users author;
+
+  private String imgPath;
+
+  @Builder.Default
+  @OneToMany(
+    mappedBy = "post",
+    fetch = FetchType.LAZY,
+    cascade = CascadeType.REMOVE
+  )
+  List<Like> likes = new ArrayList<>();
+
+  @Builder.Default
+  @OneToMany(
+    mappedBy = "post",
+    fetch = FetchType.LAZY,
+    cascade = CascadeType.REMOVE
+  )
+  List<Comment> comments = new ArrayList<>();
 }

@@ -1,15 +1,21 @@
 package com.esgi.pa.api.dtos.responses.post;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class PostGetResponse {
-    private Long id;
-    private Long userId;
-    private String userName;
-    private String Description;
-}
+import java.util.List;
+
+import com.esgi.pa.api.dtos.responses.comment.CommentGetResponse;
+import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+@JsonAutoDetect(fieldVisibility = ANY)
+public record PostGetResponse(
+  Long id,
+  GetUserResponse author,
+  String description,
+  String imgPath,
+  String datepost,
+  List<CommentGetResponse> comments,
+  Integer nbLikes,
+  Boolean isLikes
+) {}

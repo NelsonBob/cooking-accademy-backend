@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CourRepository extends JpaRepository<Cour, Long> {
   List<Cour> findByStatus(Boolean status);
+  List<Cour> findTop3ByOrderByIdDesc();
 }

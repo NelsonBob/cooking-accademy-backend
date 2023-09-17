@@ -1,16 +1,8 @@
 package com.esgi.pa.api.dtos.responses.comment;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CommentGetResponse {
-    private Long id;
-    private Long postId;
-    private Long userId;
-    private String userName;
-    private String description;
-}
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+@JsonAutoDetect(fieldVisibility = ANY)
+public record CommentGetResponse(Long id, String description) {}

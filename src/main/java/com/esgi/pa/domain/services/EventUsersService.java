@@ -5,7 +5,6 @@ import com.esgi.pa.domain.entities.EventUsers;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.StatusReservationEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
-import com.esgi.pa.server.repositories.EventRepository;
 import com.esgi.pa.server.repositories.EventUsersRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EventUsersService {
 
-  private final EventRepository eventRepository;
   private final EventUsersRepository eventUsersRepository;
 
   public List<EventUsers> listEventUsers(Users users) {

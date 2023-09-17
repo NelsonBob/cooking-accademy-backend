@@ -1,51 +1,33 @@
 package com.esgi.pa.domain.services;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
-import com.esgi.pa.api.dtos.requests.comment.CommentUpdateRequest;
 import com.esgi.pa.domain.entities.Comment;
+import com.esgi.pa.domain.entities.Post;
+import com.esgi.pa.domain.entities.Users;
+import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.server.repositories.CommentRepository;
-
+import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class CommentService {
-    private final CommentRepository commentRepository;
 
+  private final CommentRepository commentRepository;
 
-    public void add(Comment comment) {
-        commentRepository.save(comment);
-    }
+  public List<Comment> findByPost(Post post) {
+    return commentRepository.findByPostOrderByIdDesc(post);
+  }
 
-    public List<Comment> getAll() {
-
-        return commentRepository.findAll();
-    }
-
-    public Comment getById(Long id) {
-
-        return commentRepository.findById(id).orElse(null);
-    }
-
-    public List<Comment> getAllByPost(Long postId) {
-        return commentRepository.findAllByPost_Id(postId);
-    }
-
-    public List<Comment> getAllByUser(Long userId) {
-        return commentRepository.findAllByUser_Id(userId);
-    }
-
-    public void update(Long id, CommentUpdateRequest commentUpdateRequest) {
-        Comment commentToUpdate = commentRepository.findById(id).orElse(null);
-        if (commentToUpdate != null) {
-            commentToUpdate.setDescription(commentUpdateRequest.getDescription());
-        }
-    }
-
-    public void delete(Long id) {
-        commentRepository.deleteById(id);
-    }
+  public void create(Users author, Post post, String description)
+    throws TechnicalFoundException {
+    commentRepository.save(
+      Comment
+        .builder()
+        .post(post)
+        .author(author)
+        .description(description)
+        .build()
+    );
+  }
 }

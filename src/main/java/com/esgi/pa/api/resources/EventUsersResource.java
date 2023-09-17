@@ -12,7 +12,6 @@ import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.EventService;
 import com.esgi.pa.domain.services.EventUsersService;
 import com.esgi.pa.domain.services.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import java.util.List;
 import javax.validation.Valid;
@@ -54,7 +53,7 @@ public class EventUsersResource {
     @Valid @RequestBody UpdateEventRequest request,
     @PathVariable Long id
   )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException, NotAuthorizationRessourceException {
+    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     EventUsers event = eventUsersService.getById(request.id());
     eventUsersService.updateEventUsers(event, request.statusEvent());
@@ -68,7 +67,7 @@ public class EventUsersResource {
     @Valid @RequestBody UpdateEventRequest request,
     @PathVariable Long id
   )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException, NotAuthorizationRessourceException {
+    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     Evenement event = eventService.getById(request.id());
     eventUsersService.createEventUsers(event, request.statusEvent(), users);

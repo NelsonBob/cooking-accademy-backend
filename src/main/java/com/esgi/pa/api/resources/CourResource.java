@@ -3,6 +3,22 @@ package com.esgi.pa.api.resources;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.esgi.pa.api.dtos.requests.cour.CreateCourRequest;
 import com.esgi.pa.api.dtos.requests.cour.UpdateCourRequest;
 import com.esgi.pa.api.dtos.responses.cour.GetCourResponse;
@@ -19,21 +35,9 @@ import com.esgi.pa.domain.services.CourService;
 import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.MessageService;
 import com.esgi.pa.domain.services.UserService;
+
 import io.swagger.annotations.Api;
-import java.util.List;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Contient les routes des Service Abonnement
@@ -143,5 +147,12 @@ public class CourResource {
     } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
+  }
+
+  @GetMapping("last-cour/{id}")
+  public List<GetCourResponse> getLast3Cours(@PathVariable Long id)
+    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+    Users users = userService.getById(id);
+    return CourMapper.toGetCourResponse(courService.find3Last());
   }
 }

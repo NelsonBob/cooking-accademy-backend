@@ -76,7 +76,9 @@ public class CourService {
   public List<Cour> findAll() {
     return courRepository.findAll();
   }
-
+ public List<Cour> find3Last() {
+    return courRepository.findTop3ByOrderByIdDesc();
+  }
   public List<Cour> findByStatus() {
     return courRepository.findByStatus(Boolean.TRUE);
   }

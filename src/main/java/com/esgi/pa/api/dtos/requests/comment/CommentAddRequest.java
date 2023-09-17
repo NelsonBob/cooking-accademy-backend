@@ -1,13 +1,15 @@
 package com.esgi.pa.api.dtos.requests.comment;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CommentAddRequest {
-    private Long postId;
-    private String description;
-}
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import lombok.Builder;
+
+@Builder
+@JsonAutoDetect(fieldVisibility = ANY)
+public record CommentAddRequest(
+  @NotNull(message = "Post is required") Long post,
+  @NotBlank(message = "Description is required") String description
+) {}

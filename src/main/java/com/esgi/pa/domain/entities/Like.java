@@ -1,30 +1,42 @@
 package com.esgi.pa.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "likes")
 public class Like {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id")
-    private  Long id;
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    Users user;
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    Post post;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
+  private Long id;
+
+  @NotNull
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  Users user;
+
+  @ManyToOne
+  @JoinColumn(name = "post_id", referencedColumnName = "id")
+  @JsonIgnoreProperties({ "post" })
+  Post post;
 }

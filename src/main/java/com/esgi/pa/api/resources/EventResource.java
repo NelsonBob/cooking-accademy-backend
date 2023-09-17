@@ -8,6 +8,7 @@ import com.esgi.pa.api.dtos.requests.event.CreateEventWithUsersRequest;
 import com.esgi.pa.api.dtos.requests.event.UpdateEventRequest;
 import com.esgi.pa.api.dtos.responses.event.GetEventIdResponse;
 import com.esgi.pa.api.dtos.responses.event.GetEventResponse;
+import com.esgi.pa.api.dtos.responses.event.GetFuturResponse;
 import com.esgi.pa.api.mappers.EventMapper;
 import com.esgi.pa.domain.entities.Evenement;
 import com.esgi.pa.domain.entities.Salle;
@@ -21,7 +22,6 @@ import com.esgi.pa.domain.services.EventService;
 import com.esgi.pa.domain.services.SalleService;
 import com.esgi.pa.domain.services.UserService;
 import com.esgi.pa.domain.services.util.UtilService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,8 +59,7 @@ public class EventResource {
   public List<GetEventResponse> create(
     @Valid @RequestBody CreateEventRequest request,
     @PathVariable Long id
-  )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException {
+  ) throws TechnicalFoundException, TechnicalNotFoundException {
     Users users = userService.getById(id);
     Salle salle1 = salleService.getById(request.elementId());
     eventService.createReservation(
@@ -86,7 +85,6 @@ public class EventResource {
     ) return EventMapper.toGetEventResponse(
       eventService.findEventListAdmin(users)
     ); else {
-      System.out.print("ddddddddddddddddddd ");
       return EventMapper.toGetEventResponse(eventService.findEventList(users));
     }
   }
@@ -119,7 +117,7 @@ public class EventResource {
     @Valid @RequestBody UpdateEventRequest request,
     @PathVariable Long id
   )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException, NotAuthorizationRessourceException {
+    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     Evenement event = eventService.getById(request.id());
     eventService.updateEvent(event, request.statusEvent());
@@ -137,8 +135,7 @@ public class EventResource {
   public ResponseEntity<?> createEventWithUsers(
     @Valid @RequestBody CreateEventWithUsersRequest request,
     @PathVariable Long id
-  )
-    throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException {
+  ) throws TechnicalFoundException, TechnicalNotFoundException {
     Users users = userService.getById(id);
     List<Users> list2 = new ArrayList<>();
     request
@@ -169,5 +166,15 @@ public class EventResource {
   ) throws TechnicalNotFoundException {
     Users users = userService.getById(id);
     return EventMapper.toGetEventIdResponse(eventService.getById(idk));
+  }
+
+  @GetMapping("{id}/futur")
+  public List<GetFuturResponse> futurEvent(@PathVariable Long id)
+    throws TechnicalNotFoundException {
+    Users users = userService.getById(id);
+    return EventMapper.toGetFuturResponse(
+      eventService.findEventAll(TypeEventEnum.Reservation),
+      users
+    );
   }
 }
