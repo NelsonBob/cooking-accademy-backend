@@ -1,18 +1,16 @@
 package com.esgi.pa.domain.services;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
+import com.esgi.pa.domain.entities.Evenement;
 import com.esgi.pa.domain.entities.EventUsers;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.StatusReservationEnum;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.EventRepository;
 import com.esgi.pa.server.repositories.EventUsersRepository;
-
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +29,21 @@ public class EventUsersService {
   ) {
     eventUsers.setStatusEvent(statusReservationEnum);
     eventUsersRepository.save(eventUsers);
+  }
+
+  public void createEventUsers(
+    Evenement evenement,
+    StatusReservationEnum statusReservationEnum,
+    Users users
+  ) {
+    eventUsersRepository.save(
+      EventUsers
+        .builder()
+        .users(users)
+        .event(evenement)
+        .statusEvent(statusReservationEnum)
+        .build()
+    );
   }
 
   public EventUsers getById(Long id) throws TechnicalNotFoundException {

@@ -37,6 +37,7 @@ public class EventUsers {
 
   @ManyToOne
   @JoinColumn(name = "event_id", referencedColumnName = "id")
+ @JsonIgnoreProperties({ "event" })
   private Evenement event;
 
   @ManyToOne

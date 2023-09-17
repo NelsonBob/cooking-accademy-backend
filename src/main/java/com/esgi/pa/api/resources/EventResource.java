@@ -6,9 +6,11 @@ import static org.springframework.http.HttpStatus.OK;
 import com.esgi.pa.api.dtos.requests.event.CreateEventRequest;
 import com.esgi.pa.api.dtos.requests.event.CreateEventWithUsersRequest;
 import com.esgi.pa.api.dtos.requests.event.UpdateEventRequest;
+import com.esgi.pa.api.dtos.responses.event.GetEventIdResponse;
 import com.esgi.pa.api.dtos.responses.event.GetEventResponse;
 import com.esgi.pa.api.mappers.EventMapper;
 import com.esgi.pa.domain.entities.Evenement;
+import com.esgi.pa.domain.entities.Salle;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.RoleEnum;
 import com.esgi.pa.domain.enums.TypeEventEnum;
@@ -16,6 +18,7 @@ import com.esgi.pa.domain.exceptions.NotAuthorizationRessourceException;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.EventService;
+import com.esgi.pa.domain.services.SalleService;
 import com.esgi.pa.domain.services.UserService;
 import com.esgi.pa.domain.services.util.UtilService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,6 +52,7 @@ public class EventResource {
 
   private final UserService userService;
   private final EventService eventService;
+  private final SalleService salleService;
 
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
@@ -58,13 +62,15 @@ public class EventResource {
   )
     throws TechnicalFoundException, TechnicalNotFoundException, JsonProcessingException {
     Users users = userService.getById(id);
+    Salle salle1 = salleService.getById(request.elementId());
     eventService.createReservation(
       users,
       request.title(),
       request.start(),
       request.end(),
       request.elementId(),
-      request.imgPath()
+      request.imgPath(),
+      salle1
     );
     return EventMapper.toGetEventResponse(
       eventService.findEvent(TypeEventEnum.Reservation, request.elementId())
@@ -78,10 +84,11 @@ public class EventResource {
     if (
       UtilService.isGranted(users.getRole(), Arrays.asList(RoleEnum.Admin))
     ) return EventMapper.toGetEventResponse(
-      eventService.findAll()
-    ); else return EventMapper.toGetEventResponse(
-      eventService.findEventList(users)
-    );
+      eventService.findEventListAdmin(users)
+    ); else {
+      System.out.print("ddddddddddddddddddd ");
+      return EventMapper.toGetEventResponse(eventService.findEventList(users));
+    }
   }
 
   @DeleteMapping(value = "{idk}/element/{id}")
@@ -99,9 +106,8 @@ public class EventResource {
 
   @DeleteMapping(value = "{idk}")
   @ResponseStatus(OK)
-  public ResponseEntity<?> deleteEvent(
-    @PathVariable Long idk
-  ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
+  public ResponseEntity<?> deleteEvent(@PathVariable Long idk)
+    throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Evenement event = eventService.getById(idk);
     eventService.delete(event);
     return ResponseEntity.status(OK).build();
@@ -150,8 +156,18 @@ public class EventResource {
       request.title(),
       request.start(),
       request.end(),
+      request.description(),
       list2
     );
     return ResponseEntity.status(OK).build();
+  }
+
+  @GetMapping("{id}/participants/{idk}")
+  public GetEventIdResponse getEventId(
+    @PathVariable Long id,
+    @PathVariable Long idk
+  ) throws TechnicalNotFoundException {
+    Users users = userService.getById(id);
+    return EventMapper.toGetEventIdResponse(eventService.getById(idk));
   }
 }

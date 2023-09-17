@@ -5,7 +5,6 @@ import com.esgi.pa.domain.enums.TypeEventEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -41,6 +40,7 @@ public class Evenement {
   private String endDate;
   private long elementId; // si c'est un planning de cour c'est id du cour
   private String imgPath;
+  private String description;
 
   @With
   @Enumerated(EnumType.STRING)
@@ -56,6 +56,10 @@ public class Evenement {
   private Users users;
 
   @Builder.Default
-  @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+  @OneToMany(
+    mappedBy = "event",
+    fetch = FetchType.LAZY,
+    cascade = CascadeType.REMOVE
+  )
   private List<EventUsers> eventUsers = new ArrayList<>();
 }

@@ -1,4 +1,4 @@
-package com.esgi.pa.api.dtos.responses.event;
+package com.esgi.pa.api.dtos.responses.eventUsers;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
@@ -8,7 +8,7 @@ import com.esgi.pa.domain.enums.TypeEventEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = ANY)
-public record GetEventResponse(
+public record GetEventUsersResponse(
   Long id,
   String title,
   String start,
@@ -17,6 +17,7 @@ public record GetEventResponse(
   String imgPath,
   String description,
   Long idcreator,
+  Long ideventuser,
   StatusReservationEnum status,
   TypeEventEnum typeEventEnum
 ) {}
