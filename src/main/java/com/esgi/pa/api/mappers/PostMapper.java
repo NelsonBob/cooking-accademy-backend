@@ -1,5 +1,6 @@
 package com.esgi.pa.api.mappers;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.esgi.pa.api.dtos.responses.post.PostGetResponse;
@@ -12,7 +13,6 @@ public interface PostMapper {
       .getLikes()
       .stream()
       .anyMatch(like -> like.getUser().equals(user));
-
     return new PostGetResponse(
       post.getId(),
       UserMapper.toGetUserResponse(post.getAuthor()),
