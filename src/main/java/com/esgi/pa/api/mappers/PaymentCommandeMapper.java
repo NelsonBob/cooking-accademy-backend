@@ -4,12 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.esgi.pa.api.dtos.responses.stripe.GetPaymentResponse;
-import com.esgi.pa.domain.entities.Payment;
+import com.esgi.pa.api.dtos.responses.stripe.GetPaymentCommandeResponse;
+import com.esgi.pa.domain.entities.PaymentCommande;
 
-public interface PaymentMapper {
-  static GetPaymentResponse toGetPaymentResponse(Payment payment) {
-    return new GetPaymentResponse(
+public interface PaymentCommandeMapper {
+  static GetPaymentCommandeResponse toGetPaymentResponse(PaymentCommande payment) {
+    return new GetPaymentCommandeResponse(
         payment.getId(),
         payment.getAmount(),
         ItemPaymentMapper.toGetItemPaymentResponse(payment.getItemPayment()),
@@ -26,10 +26,10 @@ public interface PaymentMapper {
         payment.getStatusCommande());
   }
 
-  static List<GetPaymentResponse> toGetPaymentResponse(List<Payment> entities) {
+  static List<GetPaymentCommandeResponse> toGetPaymentResponse(List<PaymentCommande> entities) {
     return entities
         .stream()
-        .map(PaymentMapper::toGetPaymentResponse)
+        .map(PaymentCommandeMapper::toGetPaymentResponse)
         .distinct()
         .toList();
   }

@@ -73,5 +73,5 @@ public class Intern {
 
   @Builder.Default
   @OneToMany(mappedBy = "livreur", fetch = FetchType.LAZY)
-  private List<Payment> commandes = new ArrayList<>();
+  private List<PaymentCommande> commandes = new ArrayList<>();
 }

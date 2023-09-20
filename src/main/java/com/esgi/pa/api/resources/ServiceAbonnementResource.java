@@ -3,22 +3,6 @@ package com.esgi.pa.api.resources;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.esgi.pa.api.dtos.requests.serviceAbonnement.CreateServiceAbonnementRequest;
 import com.esgi.pa.api.dtos.requests.serviceAbonnement.UpdateServiceAbonnementRequest;
 import com.esgi.pa.api.dtos.responses.serviceAbonnement.GetServiceAbonnementResponse;
@@ -33,9 +17,21 @@ import com.esgi.pa.domain.services.InternService;
 import com.esgi.pa.domain.services.ServiceAbonnementService;
 import com.esgi.pa.domain.services.UserService;
 import com.esgi.pa.domain.services.util.UtilService;
-
 import io.swagger.annotations.Api;
+import java.io.IOException;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Contient les routes des Service Abonnement
@@ -60,8 +56,7 @@ public class ServiceAbonnementResource {
       return ServiceAbonnementMapper.toGetServiceAbonnementResponse(
         serviceAbonnementService.findAll()
       );
-    }
-    else throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
@@ -76,13 +71,10 @@ public class ServiceAbonnementResource {
       return ServiceAbonnementMapper.toGetServiceAbonnementResponse(
         serviceAbonnementService.getById(idk)
       );
-    }
-    else throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }
-
-  
 
   @PostMapping(value = "{id}")
   @ResponseStatus(CREATED)
@@ -92,11 +84,17 @@ public class ServiceAbonnementResource {
   ) throws TechnicalFoundException, TechnicalNotFoundException {
     Users users = userService.getById(id);
     Intern intern = internService.getById(users);
+    if (
+      request.isDefault() && serviceAbonnementService.existDefault().isPresent()
+    ) throw new TechnicalFoundException(
+      "Un service est deja defini comme par defaut"
+    );
     ServiceAbonnement serviceAbonnement = serviceAbonnementService.create(
       intern,
       request.name(),
       request.description(),
-      request.imgPath()
+      request.imgPath(),
+      request.isDefault()
     );
     return ServiceAbonnementMapper.toGetServiceAbonnementResponse(
       serviceAbonnement
@@ -111,22 +109,31 @@ public class ServiceAbonnementResource {
   )
     throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
+    ServiceAbonnement serviceAbonnement1 = serviceAbonnementService.getById(
+      request.id()
+    );
+    if (
+      request.isDefault() &&
+      serviceAbonnementService.existDefault().isPresent() &&
+      serviceAbonnement1.getId() !=
+      serviceAbonnementService.existDefault().get().getId()
+    ) throw new TechnicalFoundException(
+      "Un service est deja defini comme par defaut"
+    );
+
     if (internService.doesExistForUsers(users)) {
-      ServiceAbonnement serviceAbonnement1 = serviceAbonnementService.getById(
-        request.id()
-      );
       ServiceAbonnement serviceAbonnement = serviceAbonnementService.update(
         serviceAbonnement1,
         request.name(),
         request.description(),
         request.status(),
-        request.imgPath()
+        request.imgPath(),
+        request.isDefault()
       );
       return ServiceAbonnementMapper.toGetServiceAbonnementResponse(
         serviceAbonnement
       );
-    }
-    else throw new NotAuthorizationRessourceException(
+    } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
   }

@@ -32,6 +32,6 @@ public class ItemPayment {
     private TypeCommandeEnum type;
     private String name;
     @ManyToOne
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
-    private Payment payment;
+    @JoinColumn(name = "payment_commande_id", referencedColumnName = "id")
+    private PaymentCommande payment;
 }

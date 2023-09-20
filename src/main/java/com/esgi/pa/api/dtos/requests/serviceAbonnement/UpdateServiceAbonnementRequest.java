@@ -5,17 +5,8 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import lombok.Builder;
 
-/**
- * DTO de requête de création de compte
- *
- * @param name     nom
- * @param id     oid
- * @param description    email de l'utilisateur
- * @param status mot de passe de l'utilisateur
- */
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record UpdateServiceAbonnementRequest(
@@ -23,5 +14,6 @@ public record UpdateServiceAbonnementRequest(
   @NotBlank(message = "Name is required") String name,
   String description,
   @NotBlank(message = "imgPath is required") String imgPath,
-  Boolean status
+  Boolean status,
+  Boolean isDefault
 ) {}

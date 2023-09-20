@@ -4,13 +4,13 @@ import com.esgi.pa.api.dtos.requests.stripe.ItemsRequest;
 import com.esgi.pa.api.dtos.requests.stripe.ReceiptPaymentRequest;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.ItemPayment;
-import com.esgi.pa.domain.entities.Payment;
+import com.esgi.pa.domain.entities.PaymentCommande;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.StatusCommandeEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.ItemPaymentRepository;
-import com.esgi.pa.server.repositories.PaymentRepository;
+import com.esgi.pa.server.repositories.PaymentCommandeRepository;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,9 +37,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentService {
+public class PaymentCommandeService {
 
-  private final PaymentRepository paymentRepository;
+  private final PaymentCommandeRepository paymentRepository;
   private final ItemPaymentRepository itemPaymentRepository;
 
   @Autowired
@@ -119,8 +119,8 @@ public class PaymentService {
     Integer telephone,
     String noteCommande
   ) throws TechnicalFoundException, MailException, MessagingException {
-    Payment payment = paymentRepository.save(
-      Payment
+    PaymentCommande payment = paymentRepository.save(
+      PaymentCommande
         .builder()
         .amount(amount)
         .receiptPath(fileName)
@@ -243,19 +243,19 @@ public class PaymentService {
     }
   }
 
-  public List<Payment> findAll() {
+  public List<PaymentCommande> findAll() {
     return paymentRepository.findAll();
   }
 
-  public List<Payment> listPaymentLivreur(Intern livreur) {
+  public List<PaymentCommande> listPaymentLivreur(Intern livreur) {
     return paymentRepository.findByLivreur(livreur);
   }
 
-  public List<Payment> listPaymentUser(Users users) {
+  public List<PaymentCommande> listPaymentUser(Users users) {
     return paymentRepository.findByUsers(users);
   }
 
-  public Payment getById(Long id) throws TechnicalNotFoundException {
+  public PaymentCommande getById(Long id) throws TechnicalNotFoundException {
     return paymentRepository
       .findById(id)
       .orElseThrow(() ->
@@ -266,7 +266,7 @@ public class PaymentService {
       );
   }
 
-  public void assignLivreur(Intern intern, Payment payment)
+  public void assignLivreur(Intern intern, PaymentCommande payment)
     throws TechnicalNotFoundException {
     payment.setLivreur(intern);
     paymentRepository.save(payment);
@@ -274,7 +274,7 @@ public class PaymentService {
 
   public void validateLivraison(
     StatusCommandeEnum statusCommandeEnum,
-    Payment payment
+    PaymentCommande payment
   ) throws TechnicalNotFoundException {
     payment.setStatusCommande(statusCommandeEnum);
     paymentRepository.save(payment);

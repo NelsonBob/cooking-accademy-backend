@@ -30,8 +30,8 @@ import lombok.With;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "payments")
-public class Payment {
+@Table(name = "payment_commande")
+public class PaymentCommande {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

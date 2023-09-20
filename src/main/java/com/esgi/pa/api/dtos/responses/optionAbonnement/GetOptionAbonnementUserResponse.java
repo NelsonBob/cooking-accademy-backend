@@ -1,15 +1,12 @@
-package com.esgi.pa.api.dtos.responses.serviceAbonnement;
+package com.esgi.pa.api.dtos.responses.optionAbonnement;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = ANY)
-public record GetServiceAbonnementResponse(
+public record GetOptionAbonnementUserResponse(
   Long id,
   String name,
-  String description,
-  String imgPath,
-  Boolean status,
-  Boolean isDefault
+  Boolean status
 ) {}

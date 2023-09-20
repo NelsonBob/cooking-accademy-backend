@@ -2,8 +2,10 @@ package com.esgi.pa.domain.services;
 
 import com.esgi.pa.domain.entities.Client;
 import com.esgi.pa.domain.entities.Intern;
+import com.esgi.pa.domain.entities.ServiceAbonnement;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.RoleEnum;
+import com.esgi.pa.domain.enums.TypeAbonnement;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.domain.services.security.JwtService;
@@ -12,7 +14,9 @@ import com.esgi.pa.server.repositories.ClientRepository;
 import com.esgi.pa.server.repositories.InternRepository;
 import com.esgi.pa.server.repositories.UsersRepository;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +37,8 @@ public class AuthService {
   private final InternRepository internRepository;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
+  private final ServiceAbonnementService serviceAbonnementService;
+  private final UserService userService;
 
   /**
    * Permet la création d'un nouvel utilisateur
@@ -52,6 +58,8 @@ public class AuthService {
     String adress
   ) throws TechnicalFoundException {
     if (usersRepository.findByEmail(email).isEmpty()) {
+      Optional<ServiceAbonnement> service = serviceAbonnementService.existDefault();
+
       Users savedUser = usersRepository.save(
         Users
           .builder()
@@ -59,6 +67,9 @@ public class AuthService {
           .email(email)
           .password(passwordEncoder.encode(password))
           .role(role)
+          .serviceAbonnement(service.isPresent() ? service.get() : null)
+          .dateSuscription(new Date())
+          .dateExpiration(userService.dateSubscription(TypeAbonnement.AN))
           .build()
       );
       Users users = usersRepository

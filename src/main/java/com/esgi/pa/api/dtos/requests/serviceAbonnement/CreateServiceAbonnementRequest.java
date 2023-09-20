@@ -17,5 +17,6 @@ import lombok.Builder;
 public record CreateServiceAbonnementRequest(
   @NotBlank(message = "Name is required") String name,
   String description,
-  @NotBlank(message = "imgPath is required") String imgPath
+  @NotBlank(message = "imgPath is required") String imgPath,
+  @NotBlank(message = "isDefault is required") Boolean isDefault
 ) {}

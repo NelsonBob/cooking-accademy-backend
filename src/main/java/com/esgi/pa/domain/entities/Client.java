@@ -1,6 +1,6 @@
 package com.esgi.pa.domain.entities;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,9 +16,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Entité représentant les informations d'un Formateur
- */
+
 @Data
 @Builder
 @Entity
@@ -31,7 +29,7 @@ public class Client {
     private Long id;
     private String adress;
     private Integer nbVideoDay;
-    private LocalDateTime videoDay;
+    private Date videoDay;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")

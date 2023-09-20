@@ -9,7 +9,7 @@ import lombok.Builder;
 
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
-public record ItemPaymentResponse(Long id, Integer price, String name,
+public record ItemPaymentCommandeResponse(Long id, Integer price, String name,
         Integer itemTotal, Integer quantity, 
         TypeCommandeEnum type) {
 }

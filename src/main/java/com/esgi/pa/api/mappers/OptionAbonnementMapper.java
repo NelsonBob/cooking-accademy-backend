@@ -1,6 +1,7 @@
 package com.esgi.pa.api.mappers;
 
 import com.esgi.pa.api.dtos.responses.optionAbonnement.GetOptionAbonnementResponse;
+import com.esgi.pa.api.dtos.responses.optionAbonnement.GetOptionAbonnementUserResponse;
 import com.esgi.pa.domain.entities.OptionAbonnement;
 import java.util.List;
 
@@ -27,6 +28,26 @@ public interface OptionAbonnementMapper {
     return entities
       .stream()
       .map(OptionAbonnementMapper::toGetOptionAbonnementResponse)
+      .distinct()
+      .toList();
+  }
+
+  static GetOptionAbonnementUserResponse toGetOptionAbonnementUserResponse(
+    OptionAbonnement optionAbonnement
+  ) {
+    return new GetOptionAbonnementUserResponse(
+      optionAbonnement.getId(),
+      optionAbonnement.getName(),
+      optionAbonnement.getStatus()
+    );
+  }
+
+  static List<GetOptionAbonnementUserResponse> toGetOptionAbonnementUserResponse(
+    List<OptionAbonnement> entities
+  ) {
+    return entities
+      .stream()
+      .map(OptionAbonnementMapper::toGetOptionAbonnementUserResponse)
       .distinct()
       .toList();
   }

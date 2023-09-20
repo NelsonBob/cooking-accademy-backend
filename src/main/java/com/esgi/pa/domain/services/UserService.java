@@ -2,8 +2,11 @@ package com.esgi.pa.domain.services;
 
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.RoleEnum;
+import com.esgi.pa.domain.enums.TypeAbonnement;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.UsersRepository;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -68,5 +71,16 @@ public class UserService {
   public void updatePicture(Users users, String imgPath) {
     users.setImgPath(imgPath);
     usersRepository.save(users);
+  }
+
+  public Date dateSubscription(TypeAbonnement typeAbonnement) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date());
+    if (typeAbonnement.MOIS == TypeAbonnement.MOIS) {
+      calendar.add(Calendar.MONTH, 12);
+    } else calendar.add(Calendar.YEAR, 1);
+
+    Date nextYearDate = calendar.getTime();
+    return nextYearDate;
   }
 }

@@ -1,17 +1,15 @@
 package com.esgi.pa.domain.services;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.ServiceAbonnement;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.ServiceAbonnementRepository;
-
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 /**
  * Service de gestion des utilisateurs
@@ -37,7 +35,8 @@ public class ServiceAbonnementService {
     Intern creator,
     String name,
     String description,
-    String imgPath
+    String imgPath,
+    Boolean isDefault
   ) throws TechnicalFoundException {
     if (serviceAbonnementRepository.findByName(name).isEmpty()) {
       ServiceAbonnement saveAb = serviceAbonnementRepository.save(
@@ -63,8 +62,8 @@ public class ServiceAbonnementService {
     String name,
     String description,
     Boolean status,
-    String imgPath
-
+    String imgPath,
+    Boolean isDefault
   ) throws TechnicalFoundException {
     if (
       serviceAbonnementRepository.findByName(name).isEmpty() ||
@@ -97,5 +96,9 @@ public class ServiceAbonnementService {
 
   public List<ServiceAbonnement> findByStatus() {
     return serviceAbonnementRepository.findByStatusOrderById(Boolean.TRUE);
+  }
+
+  public Optional<ServiceAbonnement> existDefault() {
+    return serviceAbonnementRepository.findByIsDefault(Boolean.TRUE);
   }
 }

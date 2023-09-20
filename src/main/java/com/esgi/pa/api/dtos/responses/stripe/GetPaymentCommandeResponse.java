@@ -10,10 +10,10 @@ import com.esgi.pa.domain.enums.StatusCommandeEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = ANY)
-public record GetPaymentResponse(
+public record GetPaymentCommandeResponse(
         Long id,
         Integer amount,
-        List<ItemPaymentResponse> items,
+        List<ItemPaymentCommandeResponse> items,
         GetUserResponse user,
         String paymentDate,
         String receiptPath,

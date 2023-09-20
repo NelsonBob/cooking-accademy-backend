@@ -3,6 +3,7 @@ package com.esgi.pa.api.mappers;
 import java.util.List;
 
 import com.esgi.pa.api.dtos.responses.optionServiceAbonnement.GetOptionServiceAbonnementResponse;
+import com.esgi.pa.api.dtos.responses.optionServiceAbonnement.GetOptionServiceAbonnementUserResponse;
 import com.esgi.pa.domain.entities.OptionServiceAbonnement;
 
 public interface OptionServiceAbonnementMapper {
@@ -27,6 +28,31 @@ public interface OptionServiceAbonnementMapper {
     return entities
       .stream()
       .map(OptionServiceAbonnementMapper::toGetOptionServiceAbonnementResponse)
+      .distinct()
+      .toList();
+  }
+
+  static GetOptionServiceAbonnementUserResponse toGetOptionServiceAbonnementUserResponse(
+    OptionServiceAbonnement optionServiceAbonnement
+  ) {
+    return new GetOptionServiceAbonnementUserResponse(
+      optionServiceAbonnement.getId(),
+      optionServiceAbonnement.getIsValueicon(),
+      optionServiceAbonnement.getDescriptionvalue(),
+      OptionAbonnementMapper.toGetOptionAbonnementUserResponse(
+        optionServiceAbonnement.getOptionAbonnement()
+      )
+    );
+  }
+
+  static List<GetOptionServiceAbonnementUserResponse> toGetOptionServiceAbonnementUserResponse(
+    List<OptionServiceAbonnement> entities
+  ) {
+    return entities
+      .stream()
+      .map(
+        OptionServiceAbonnementMapper::toGetOptionServiceAbonnementUserResponse
+      )
       .distinct()
       .toList();
   }

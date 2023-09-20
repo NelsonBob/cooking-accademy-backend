@@ -5,5 +5,5 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = ANY)
-public record CreatePaymentResponse(String clientSecret) {
+public record CreatePaymentCommandeResponse(String clientSecret) {
 };

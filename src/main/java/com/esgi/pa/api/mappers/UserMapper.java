@@ -17,7 +17,10 @@ public interface UserMapper {
       users.getName(),
       users.getEmail(),
       users.getRole(),
-      users.getImgPath()
+      users.getImgPath(),
+      ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(
+        users.getServiceAbonnement()
+      )
     );
   }
 
