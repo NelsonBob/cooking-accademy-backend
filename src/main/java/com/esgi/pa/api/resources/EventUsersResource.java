@@ -1,5 +1,7 @@
 package com.esgi.pa.api.resources;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import com.esgi.pa.api.dtos.requests.event.UpdateEventRequest;
 import com.esgi.pa.api.dtos.responses.eventUsers.GetEventUsersResponse;
 import com.esgi.pa.api.mappers.EventUsersMapper;
@@ -23,11 +25,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Contient les routes des Service Abonnement
- */
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -63,14 +63,15 @@ public class EventUsersResource {
   }
 
   @PostMapping(value = "{id}")
-  public List<GetEventUsersResponse> checkEventEvent(
+  @ResponseStatus(OK)
+  public List<GetEventUsersResponse> checkEventUser(
     @Valid @RequestBody UpdateEventRequest request,
     @PathVariable Long id
   )
     throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     Evenement event = eventService.getById(request.id());
-    eventUsersService.createEventUsers(event, request.statusEvent(), users);
+    eventUsersService.createorRemove(event, request.statusEvent(), users);
     return EventUsersMapper.toGetEventUserResponse(
       eventUsersService.listEventUsers(users)
     );

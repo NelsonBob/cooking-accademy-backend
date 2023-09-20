@@ -1,5 +1,11 @@
 package com.esgi.pa.domain.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import com.esgi.pa.domain.entities.Evenement;
 import com.esgi.pa.domain.entities.EventUsers;
 import com.esgi.pa.domain.entities.Salle;
@@ -10,11 +16,8 @@ import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.EventRepository;
 import com.esgi.pa.server.repositories.EventUsersRepository;
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -72,6 +75,16 @@ public class EventService {
 
   public List<Evenement> findEventAll(TypeEventEnum typeEventEnum) {
     return eventRepository.findByTypeEventEnumIsNot(typeEventEnum);
+  }
+
+  public List<Evenement> findEventAllFutur(
+    TypeEventEnum typeEventEnum,
+    Users users
+  ) {
+    return eventRepository.findByTypeEventEnumAndUsersIsNot(
+      typeEventEnum,
+      users
+    );
   }
 
   public Evenement getById(Long id) throws TechnicalNotFoundException {

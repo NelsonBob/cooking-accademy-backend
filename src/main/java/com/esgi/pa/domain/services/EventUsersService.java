@@ -4,9 +4,11 @@ import com.esgi.pa.domain.entities.Evenement;
 import com.esgi.pa.domain.entities.EventUsers;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.StatusReservationEnum;
+import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.EventUsersRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,12 +31,18 @@ public class EventUsersService {
     eventUsersRepository.save(eventUsers);
   }
 
-  public void createEventUsers(
+  public void createorRemove(
     Evenement evenement,
     StatusReservationEnum statusReservationEnum,
     Users users
-  ) {
-    eventUsersRepository.save(
+  ) throws TechnicalFoundException {
+    Optional<EventUsers> event = eventUsersRepository.findByEventAndUsers(
+      evenement,
+      users
+    );
+    if (event.isPresent()) eventUsersRepository.delete(
+      event.get()
+    ); else eventUsersRepository.save(
       EventUsers
         .builder()
         .users(users)

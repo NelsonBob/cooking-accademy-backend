@@ -173,7 +173,7 @@ public class EventResource {
     throws TechnicalNotFoundException {
     Users users = userService.getById(id);
     return EventMapper.toGetFuturResponse(
-      eventService.findEventAll(TypeEventEnum.Reservation),
+      eventService.findEventAllFutur(TypeEventEnum.Meeting, users),
       users
     );
   }
