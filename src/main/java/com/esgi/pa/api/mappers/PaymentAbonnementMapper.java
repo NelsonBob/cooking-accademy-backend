@@ -18,7 +18,9 @@ public interface PaymentAbonnementMapper {
       UserMapper.toGetUserResponse(payment.getUsers()),
       payment.getTypeAbonnement(),
       DateConverter(payment.getPaymentDate()),
-      payment.getReceiptPath()
+      payment.getReceiptPath(),
+      payment.getUsers().getDateSuscription(),
+      payment.getUsers().getDateExpiration()
     );
   }
 
