@@ -76,7 +76,7 @@ public class UserService {
   public Date dateSubscription(TypeAbonnement typeAbonnement) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(new Date());
-    if (typeAbonnement.MOIS == TypeAbonnement.MOIS) {
+    if (typeAbonnement == TypeAbonnement.MOIS) {
       calendar.add(Calendar.MONTH, 12);
     } else calendar.add(Calendar.YEAR, 1);
 

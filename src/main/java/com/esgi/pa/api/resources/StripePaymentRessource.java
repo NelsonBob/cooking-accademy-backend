@@ -39,6 +39,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -151,7 +152,7 @@ public class StripePaymentRessource {
     @Valid @RequestBody ConfirmLivraionPaymentRequest request,
     @PathVariable Long id
   )
-    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
+    throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException, MailException, MessagingException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
       PaymentCommande payment = paymentService.getById(request.id());

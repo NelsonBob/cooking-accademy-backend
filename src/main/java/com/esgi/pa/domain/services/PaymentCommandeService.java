@@ -26,6 +26,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,9 @@ public class PaymentCommandeService {
 
   private final PaymentCommandeRepository paymentRepository;
   private final ItemPaymentRepository itemPaymentRepository;
+
+  @Value("${application.base.url.front}")
+  private String baseFront;
 
   @Autowired
   private JavaMailSender javaMailSender;
@@ -272,11 +276,51 @@ public class PaymentCommandeService {
     paymentRepository.save(payment);
   }
 
+  public void sendAvisByEmail(Users users, long idpay)
+    throws MailException, MessagingException {
+    try {
+      MimeMessage message = javaMailSender.createMimeMessage();
+      MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+      helper.setFrom("Cooking-APP <koumwinnie@zohomail.com>");
+      helper.setTo(users.getEmail());
+      helper.setSubject("Delivery colis");
+      helper.setText(
+        "<html>" +
+        "<body>" +
+        "<p>Hello " +
+        users.getName() +
+        ",</p>" +
+        "<p>Your parcel has been delivered.</p>" +
+        "<p>Please <a href='" +
+        baseFront +
+        "?id=" +
+        idpay +
+        "'>click here</a> to leave your feedback.</p>" +
+        "<p>Sincerely</p>" +
+        "</body>" +
+        "</html>",
+        true
+      );
+
+      javaMailSender.send(message);
+      System.out.println("Email sent successfully!");
+    } catch (MailException | MessagingException e) {
+      System.err.println(
+        "Failed to send email with attachment: " + e.getMessage()
+      );
+    }
+  }
+
   public void validateLivraison(
     StatusCommandeEnum statusCommandeEnum,
     PaymentCommande payment
-  ) throws TechnicalNotFoundException {
+  ) throws TechnicalNotFoundException, MailException, MessagingException {
     payment.setStatusCommande(statusCommandeEnum);
     paymentRepository.save(payment);
+
+    if (statusCommandeEnum == StatusCommandeEnum.Delivered) {
+      sendAvisByEmail(payment.getUsers(), payment.getId());
+    }
   }
 }
