@@ -1,15 +1,18 @@
 package com.esgi.pa.domain.services;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.ServiceAbonnement;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.ServiceAbonnementRepository;
-import java.util.List;
-import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 
 /**
  * Service de gestion des utilisateurs
@@ -47,6 +50,7 @@ public class ServiceAbonnementService {
           .creator(creator)
           .status(Boolean.TRUE)
           .imgPath(imgPath)
+          .isDefault(isDefault)
           .build()
       );
       return saveAb;
@@ -75,6 +79,7 @@ public class ServiceAbonnementService {
       serviceAbonnement.setDescription(description);
       serviceAbonnement.setStatus(status);
       serviceAbonnement.setImgPath(imgPath);
+      serviceAbonnement.setIsDefault(isDefault);
       ServiceAbonnement saveAb = serviceAbonnementRepository.save(
         serviceAbonnement
       );

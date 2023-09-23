@@ -83,6 +83,10 @@ public class Users implements UserDetails {
   @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
   private List<EventUsers> eventUsers = new ArrayList<>();
 
+  @Builder.Default
+  @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+  private List<CourAbonnement> courAbonnements = new ArrayList<>();
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.name()));

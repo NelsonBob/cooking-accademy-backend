@@ -11,22 +11,27 @@ import java.util.List;
 public interface CourMapper {
   static GetCourResponse toGetCourResponse(Cour cour) {
     return new GetCourResponse(
-        cour.getId(),
-        cour.getName(),
-        cour.getDescription(),
-        cour.getImgPath(),
-        cour.getVideoLink(),
-        cour.getContentCour(),
-        cour.getStatus(),
-        cour.getIsVideoLocal(),
-        InternMapper.toGetInternResponse(cour.getCreator()));
+      cour.getId(),
+      cour.getName(),
+      cour.getDescription(),
+      cour.getImgPath(),
+      cour.getVideoLink(),
+      cour.getContentCour(),
+      cour.getStatus(),
+      cour.getIsVideoLocal(),
+      InternMapper.toGetInternResponse(cour.getCreator())
+    );
   }
 
   static List<GetCourResponse> toGetCourResponse(List<Cour> entities) {
     return entities
-        .stream()
-        .map(CourMapper::toGetCourResponse)
-        .distinct()
-        .toList();
+      .stream()
+      .map(CourMapper::toGetCourResponse)
+      .distinct()
+      .toList();
+  }
+
+  static Boolean toGetPermissionCourResponse(Boolean boolean1) {
+    return boolean1;
   }
 }

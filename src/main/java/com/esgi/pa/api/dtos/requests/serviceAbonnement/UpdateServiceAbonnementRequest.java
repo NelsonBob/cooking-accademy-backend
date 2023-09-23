@@ -2,9 +2,11 @@ package com.esgi.pa.api.dtos.requests.serviceAbonnement;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import lombok.Builder;
 
 @Builder
@@ -15,5 +17,5 @@ public record UpdateServiceAbonnementRequest(
   String description,
   @NotBlank(message = "imgPath is required") String imgPath,
   Boolean status,
-  Boolean isDefault
+  @NotNull(message = "isDefault is required") Boolean isDefault
 ) {}

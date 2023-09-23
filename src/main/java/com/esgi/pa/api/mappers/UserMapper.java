@@ -3,6 +3,7 @@ package com.esgi.pa.api.mappers;
 import com.esgi.pa.api.dtos.responses.auth.AuthenticationUserResponse;
 import com.esgi.pa.api.dtos.responses.user.GetUserResponse;
 import com.esgi.pa.api.dtos.responses.user.GetUserSimpleResponse;
+import com.esgi.pa.domain.entities.ServiceAbonnement;
 import com.esgi.pa.domain.entities.Users;
 import java.util.List;
 
@@ -19,7 +20,9 @@ public interface UserMapper {
       users.getRole(),
       users.getImgPath(),
       ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(
-        users.getServiceAbonnement()
+        users.getServiceAbonnement() == null
+          ? new ServiceAbonnement()
+          : users.getServiceAbonnement()
       )
     );
   }
