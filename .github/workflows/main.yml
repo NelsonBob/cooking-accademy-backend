@@ -21,13 +21,10 @@ jobs:
         ssh-host: ${{ secrets.SSH_HOST }}
 
     - name: Install OpenJDK
-      run: sudo apt-get install openjdk-11-jre -y
+      run: sudo apt-get install openjdk-19-jre -y
 
     - name: Build Spring Boot Application
       run: ./mvnw package
 
-    - name: Upload JAR to DigitalOcean Server
-      run: scp target/your-spring-boot-app.jar ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/path/to/destination
-
     - name: SSH into DigitalOcean Server
-      run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "systemctl stop your-spring-boot-app.service && mv /path/to/destination/your-spring-boot-app.jar /path/to/destination/ && systemctl start your-spring-boot-app.service"
+      run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "systemctl stop cooking.service && cd /var/www/cooking-accademy-backend/ && mvn clean install -DskipTests && systemctl start cooking.service"
