@@ -27,7 +27,7 @@ jobs:
         ssh-host: ${{ secrets.SSH_HOST }}
 
           script:|
-            cd /var/www/cooking-accademy-backend/
+            sudo cd /var/www/cooking-accademy-backend/
             git config pull.rebase true 
             git pull origin main  
             sudo /opt/apache-maven-3.9.3/bin/mvn clean install -DskipTests
