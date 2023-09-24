@@ -1,0 +1,33 @@
+name: Deploy Spring Boot App to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-username: ${{ secrets.SSH_USERNAME }}
+        ssh-host: ${{ secrets.SSH_HOST }}
+
+    - name: Install OpenJDK
+      run: sudo apt-get install openjdk-11-jre -y
+
+    - name: Build Spring Boot Application
+      run: ./mvnw package
+
+    - name: Upload JAR to DigitalOcean Server
+      run: scp target/your-spring-boot-app.jar ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/path/to/destination
+
+    - name: SSH into DigitalOcean Server
+      run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "systemctl stop your-spring-boot-app.service && mv /path/to/destination/your-spring-boot-app.jar /path/to/destination/ && systemctl start your-spring-boot-app.service"
