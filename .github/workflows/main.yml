@@ -13,6 +13,12 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
 
+    - name: Install OpenJDK
+      run: sudo apt-get install openjdk-19-jre -y
+
+    - name: Build Spring Boot Application
+      run: ./mvnw package
+
     - name: Set up SSH
       uses: appleboy/ssh-action@master
       with:
@@ -20,11 +26,10 @@ jobs:
         ssh-username: ${{ secrets.SSH_USERNAME }}
         ssh-host: ${{ secrets.SSH_HOST }}
 
-    - name: Install OpenJDK
-      run: sudo apt-get install openjdk-19-jre -y
-
-    - name: Build Spring Boot Application
-      run: ./mvnw package
-
-    - name: SSH into DigitalOcean Server
-      run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "systemctl stop cooking.service && cd /var/www/cooking-accademy-backend/ && mvn clean install -DskipTests && systemctl start cooking.service"
+          script:|
+            cd /var/www/cooking-accademy-backend/
+            git config pull.rebase true 
+            git pull origin main  
+            sudo /opt/apache-maven-3.9.3/bin/mvn clean install -DskipTests
+            sudo systemctl stop cooking.service  
+            sudo systemctl start cooking.service
