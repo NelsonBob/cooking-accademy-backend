@@ -17,7 +17,7 @@ jobs:
       run: sudo apt-get install openjdk-19-jre -y
 
     - name: Build Spring Boot Application
-      run: ./mvnw package
+      run: sudo ./mvnw package
 
     - name: Set up SSH
       uses: appleboy/ssh-action@master
