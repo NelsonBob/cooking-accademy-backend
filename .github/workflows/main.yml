@@ -10,20 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-    - name: Install OpenJDK
-      run: sudo apt-get install openjdk-19-jre -y
+      - name: Install OpenJDK
+        run: sudo apt-get install openjdk-19-jre -y
 
-    - name: Set up SSH
-      uses: appleboy/ssh-action@master
-      with:
-        ssh-private-key: "!n#xB#RE4BDmHapP"
-        ssh-username: "root"
-        ssh-host: 207.154.220.132
-
-          script:|
+      - name: Set up SSH
+        uses: appleboy/ssh-action@master
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-username: ${{ secrets.SSH_USERNAME }}
+          ssh-host: ${{ secrets.SSH_HOST }}
+          script: |
             sudo cd /var/www/cooking-accademy-backend/
             git config pull.rebase true 
             git pull origin main  
