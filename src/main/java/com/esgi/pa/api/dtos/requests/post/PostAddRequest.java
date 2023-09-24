@@ -3,7 +3,6 @@ package com.esgi.pa.api.dtos.requests.post;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 

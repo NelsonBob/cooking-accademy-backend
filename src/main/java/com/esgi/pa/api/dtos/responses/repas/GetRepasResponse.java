@@ -6,11 +6,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = ANY)
 public record GetRepasResponse(
-    Long id,
-    String name,
-    String description,
-    String imgPath,
-    Integer quantity,
-    Float price,
-    Boolean status) {
-}
+  Long id,
+  String name,
+  String description,
+  String imgPath,
+  Integer quantity,
+  Float price,
+  Boolean status,
+  Double avis
+) {}

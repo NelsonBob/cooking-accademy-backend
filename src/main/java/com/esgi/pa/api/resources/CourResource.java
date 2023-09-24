@@ -68,7 +68,7 @@ public class CourResource {
     @PathVariable Long id,
     @PathVariable Long idk
   ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
-    Users users = userService.getById(id);
+    userService.getById(id);
     return CourMapper.toGetCourResponse(courService.getById(idk));
   }
 

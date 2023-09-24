@@ -1,6 +1,5 @@
 package com.esgi.pa.api.mappers;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.esgi.pa.api.dtos.responses.post.PostGetResponse;

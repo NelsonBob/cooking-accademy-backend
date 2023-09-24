@@ -7,6 +7,7 @@ import com.esgi.pa.domain.entities.ItemPayment;
 import com.esgi.pa.domain.entities.PaymentCommande;
 import com.esgi.pa.domain.entities.Users;
 import com.esgi.pa.domain.enums.StatusCommandeEnum;
+import com.esgi.pa.domain.enums.TypeCommandeEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.ItemPaymentRepository;
@@ -322,5 +323,25 @@ public class PaymentCommandeService {
     if (statusCommandeEnum == StatusCommandeEnum.Delivered) {
       sendAvisByEmail(payment.getUsers(), payment.getId());
     }
+  }
+
+  public void avisUser(PaymentCommande payment, Integer note) {
+    payment.setNoteAvis(note);
+    paymentRepository.save(payment);
+  }
+
+  public Double valueAvis(TypeCommandeEnum type, Long elementId) {
+    List<ItemPayment> itemPayments = itemPaymentRepository.findByTypeAndElementId(
+      type,
+      elementId
+    );
+    Double result = itemPayments
+      .stream()
+      .mapToDouble(el ->
+        el.getPayment() == null ? 3 : el.getPayment().getNoteAvis()
+      )
+      .average()
+      .orElse(0.0);
+    return result;
   }
 }

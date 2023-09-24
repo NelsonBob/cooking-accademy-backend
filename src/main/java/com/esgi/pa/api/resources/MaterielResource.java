@@ -54,7 +54,7 @@ public class MaterielResource {
     throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      return MaterielMapper.toGetMaterielResponse(materielService.findAll());
+      return materielService.findAll();
     } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
@@ -67,7 +67,7 @@ public class MaterielResource {
   ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      return MaterielMapper.toGetMaterielResponse(materielService.getById(idk));
+      return  materielService.getById(idk);
     } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
@@ -106,7 +106,7 @@ public class MaterielResource {
     throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      Materiel materiel1 = materielService.getById(request.id());
+      Materiel materiel1 = materielService.getByIdMateriel(request.id());
       CategorieMateriel categorieMateriel = categorieMaterielService.getById(
         request.categorieMateriel()
       );
@@ -132,7 +132,7 @@ public class MaterielResource {
     throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      Materiel materiel = materielService.getById(idk);
+      Materiel materiel = materielService.getByIdMateriel(idk);
       materielService.delete(materiel);
     } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"

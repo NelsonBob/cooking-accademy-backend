@@ -1,9 +1,13 @@
 package com.esgi.pa.domain.services;
 
 import com.esgi.pa.api.dtos.requests.gallerie.GallerieRequest;
+import com.esgi.pa.api.dtos.responses.materiel.GetMaterielResponse;
+import com.esgi.pa.api.mappers.CategorieMaterielMapper;
+import com.esgi.pa.api.mappers.InternMapper;
 import com.esgi.pa.domain.entities.CategorieMateriel;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.Materiel;
+import com.esgi.pa.domain.enums.TypeCommandeEnum;
 import com.esgi.pa.domain.exceptions.TechnicalFoundException;
 import com.esgi.pa.domain.exceptions.TechnicalNotFoundException;
 import com.esgi.pa.server.repositories.MaterielRepository;
@@ -18,8 +22,39 @@ import org.springframework.stereotype.Service;
 public class MaterielService {
 
   private final MaterielRepository materielRepository;
+  private final PaymentCommandeService paymentCommandeService;
 
-  public Materiel getById(Long id) throws TechnicalNotFoundException {
+  public GetMaterielResponse getById(Long id)
+    throws TechnicalNotFoundException {
+    Materiel materiel = materielRepository
+      .findById(id)
+      .orElseThrow(() ->
+        new TechnicalNotFoundException(
+          HttpStatus.NOT_FOUND,
+          "No materiel found with following id : "
+        )
+      );
+    return new GetMaterielResponse(
+      materiel.getId(),
+      materiel.getName(),
+      materiel.getDescription(),
+      materiel.getImgPath(),
+      materiel.getStatus(),
+      convertToEntityAttribute(materiel.getGallerie()),
+      materiel.getQuantity(),
+      materiel.getPrice(),
+      CategorieMaterielMapper.toGetCategorieMaterielItemResponse(
+        materiel.getCategorieMateriel()
+      ),
+      InternMapper.toGetInternResponse(materiel.getCreator()),
+      paymentCommandeService.valueAvis(
+        TypeCommandeEnum.Materiel,
+        materiel.getId()
+      )
+    );
+  }
+
+  public Materiel getByIdMateriel(Long id) throws TechnicalNotFoundException {
     return materielRepository
       .findById(id)
       .orElseThrow(() ->
@@ -99,12 +134,60 @@ public class MaterielService {
     materielRepository.delete(materiel);
   }
 
-  public List<Materiel> findAll() {
-    return materielRepository.findAll();
+  public List<GetMaterielResponse> findAll() {
+    List<Materiel> list = materielRepository.findAll();
+    List<GetMaterielResponse> getMaterielResponses = new ArrayList<>();
+    list.forEach(materiel -> {
+      getMaterielResponses.add(
+        new GetMaterielResponse(
+          materiel.getId(),
+          materiel.getName(),
+          materiel.getDescription(),
+          materiel.getImgPath(),
+          materiel.getStatus(),
+          convertToEntityAttribute(materiel.getGallerie()),
+          materiel.getQuantity(),
+          materiel.getPrice(),
+          CategorieMaterielMapper.toGetCategorieMaterielItemResponse(
+            materiel.getCategorieMateriel()
+          ),
+          InternMapper.toGetInternResponse(materiel.getCreator()),
+          paymentCommandeService.valueAvis(
+            TypeCommandeEnum.Materiel,
+            materiel.getId()
+          )
+        )
+      );
+    });
+    return getMaterielResponses;
   }
 
-  public List<Materiel> findByStatus() {
-    return materielRepository.findByStatus(Boolean.TRUE);
+  public List<GetMaterielResponse> findByStatus() {
+    List<Materiel> list = materielRepository.findByStatus(Boolean.TRUE);
+    List<GetMaterielResponse> getMaterielResponses = new ArrayList<>();
+    list.forEach(materiel -> {
+      getMaterielResponses.add(
+        new GetMaterielResponse(
+          materiel.getId(),
+          materiel.getName(),
+          materiel.getDescription(),
+          materiel.getImgPath(),
+          materiel.getStatus(),
+          convertToEntityAttribute(materiel.getGallerie()),
+          materiel.getQuantity(),
+          materiel.getPrice(),
+          CategorieMaterielMapper.toGetCategorieMaterielItemResponse(
+            materiel.getCategorieMateriel()
+          ),
+          InternMapper.toGetInternResponse(materiel.getCreator()),
+          paymentCommandeService.valueAvis(
+            TypeCommandeEnum.Materiel,
+            materiel.getId()
+          )
+        )
+      );
+    });
+    return getMaterielResponses;
   }
 
   public List<String> galleriesList(List<GallerieRequest> gallerie) {
@@ -113,5 +196,20 @@ public class MaterielService {
       gal.add(el.fileName().toString());
     });
     return gal;
+  }
+
+  public String[] convertToEntityAttribute(String dbData) {
+    dbData = dbData.replaceAll("\\s+", ""); // Remove spaces
+
+    // Remove square brackets
+    if (dbData.startsWith("[") && dbData.endsWith("]")) {
+      dbData = dbData.substring(1, dbData.length() - 1);
+    }
+
+    String[] elements = dbData.split(",");
+    for (int i = 0; i < elements.length; i++) {
+      elements[i] = elements[i].trim(); // Remove leading/trailing spaces
+    }
+    return elements;
   }
 }

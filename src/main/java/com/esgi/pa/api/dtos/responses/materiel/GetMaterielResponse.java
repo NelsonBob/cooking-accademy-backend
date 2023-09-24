@@ -17,5 +17,6 @@ public record GetMaterielResponse(
     Integer quantity,
     Float price,
     GetCategorieMaterielItemResponse categorieMateriel,
-    GetInternResponse creator) {
+    GetInternResponse creator,
+    Double avis) {
 }

@@ -1,31 +1,36 @@
 package com.esgi.pa.api.mappers;
 
-import java.util.List;
-
 import com.esgi.pa.api.dtos.responses.materiel.GetMaterielResponse;
 import com.esgi.pa.domain.entities.Materiel;
+import java.util.List;
 
 public interface MaterielMapper {
   static GetMaterielResponse toGetMaterielResponse(Materiel materiel) {
     return new GetMaterielResponse(
-        materiel.getId(),
-        materiel.getName(),
-        materiel.getDescription(),
-        materiel.getImgPath(),
-        materiel.getStatus(),
-        convertToEntityAttribute(materiel.getGallerie()),
-        materiel.getQuantity(),
-        materiel.getPrice(),
-        CategorieMaterielMapper.toGetCategorieMaterielItemResponse(materiel.getCategorieMateriel()),
-        InternMapper.toGetInternResponse(materiel.getCreator()));
+      materiel.getId(),
+      materiel.getName(),
+      materiel.getDescription(),
+      materiel.getImgPath(),
+      materiel.getStatus(),
+      convertToEntityAttribute(materiel.getGallerie()),
+      materiel.getQuantity(),
+      materiel.getPrice(),
+      CategorieMaterielMapper.toGetCategorieMaterielItemResponse(
+        materiel.getCategorieMateriel()
+      ),
+      InternMapper.toGetInternResponse(materiel.getCreator()),
+      0.0
+    );
   }
 
-  static List<GetMaterielResponse> toGetMaterielResponse(List<Materiel> entities) {
+  static List<GetMaterielResponse> toGetMaterielResponse(
+    List<Materiel> entities
+  ) {
     return entities
-        .stream()
-        .map(MaterielMapper::toGetMaterielResponse)
-        .distinct()
-        .toList();
+      .stream()
+      .map(MaterielMapper::toGetMaterielResponse)
+      .distinct()
+      .toList();
   }
 
   static String[] convertToEntityAttribute(String dbData) {

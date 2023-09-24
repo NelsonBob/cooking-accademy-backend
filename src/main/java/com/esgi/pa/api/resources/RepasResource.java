@@ -51,7 +51,7 @@ public class RepasResource {
     throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      return RepasMapper.toGetRepasResponse(repasService.findAll());
+      return repasService.findAll();
     } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
@@ -64,7 +64,7 @@ public class RepasResource {
   ) throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      return RepasMapper.toGetRepasResponse(repasService.getById(idk));
+      return repasService.getById(idk);
     } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
@@ -98,7 +98,7 @@ public class RepasResource {
     throws TechnicalFoundException, TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      Repas repas1 = repasService.getById(request.id());
+      Repas repas1 = repasService.getByIdRepas(request.id());
       Repas repas = repasService.update(
         repas1,
         request.name(),
@@ -107,7 +107,7 @@ public class RepasResource {
         request.quantity(),
         request.price()
       );
-      return RepasMapper.toGetRepasResponse(repas);
+      return RepasMapper.toGetRepasResponse(repas,0);
     } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
     );
@@ -119,7 +119,7 @@ public class RepasResource {
     throws TechnicalNotFoundException, NotAuthorizationRessourceException {
     Users users = userService.getById(id);
     if (internService.doesExistForUsers(users)) {
-      Repas repas = repasService.getById(idk);
+      Repas repas = repasService.getByIdRepas(idk);
       repasService.delete(repas);
     } else throw new NotAuthorizationRessourceException(
       "Vous n'etes pas authorisé à accéder à cette ressource"
