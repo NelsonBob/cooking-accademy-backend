@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 public class PostService {
 
   private final PostRepository postRepository;
+  private final CommentService commentService;
+  private final LikeService likeService;
 
   public List<Post> findAll() {
     Sort sortByUserIdAsc = Sort.by(Sort.Direction.DESC, "id");
@@ -67,7 +69,7 @@ public class PostService {
 
   public void share(Users author, Post post, String datepost)
     throws TechnicalFoundException {
-    postRepository.save(
+   Post postnew =postRepository.save(
       Post
         .builder()
         .description(post.getDescription())
@@ -76,5 +78,19 @@ public class PostService {
         .datepost(datepost)
         .build()
     );
+    post.getComments().forEach(el -> {
+      try {
+        commentService.create(author, postnew, el.getDescription());
+      } catch (TechnicalFoundException e) {
+        e.printStackTrace();
+      }
+    });
+    post.getLikes().forEach(el -> {
+      try {
+        likeService.createorRemove(el.getUser(), postnew);
+      } catch (TechnicalFoundException e) {
+        e.printStackTrace();
+      }
+    });
   }
 }

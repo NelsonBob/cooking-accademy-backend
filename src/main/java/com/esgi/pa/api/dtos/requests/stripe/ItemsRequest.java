@@ -17,5 +17,5 @@ public record ItemsRequest(
   @NotBlank(message = "price is required") Integer price,
   @NotBlank(message = "itemTotal is required") Integer itemTotal,
   @NotBlank(message = "quantity is required") Integer quantity,
-  @NotBlank(message = "type is required") TypeCommandeEnum type
+  @NotNull(message = "type is required") TypeCommandeEnum type
 ) {}

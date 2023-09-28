@@ -118,7 +118,7 @@ public class ApiPublicRessource {
   @GetMapping("events")
   public List<GetEventResponse> getEventAll() {
     return EventMapper.toGetEventResponse(
-      eventService.findEventAll(TypeEventEnum.Meeting)
+      eventService.findEventAll(TypeEventEnum.Reservation)
     );
   }
 

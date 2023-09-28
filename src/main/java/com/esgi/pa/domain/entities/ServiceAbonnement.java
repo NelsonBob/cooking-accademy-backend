@@ -2,6 +2,8 @@ package com.esgi.pa.domain.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -42,6 +44,6 @@ public class ServiceAbonnement {
   private Intern creator;
 
   @Builder.Default
-  @OneToMany(mappedBy = "serviceAbonnement", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "serviceAbonnement", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
   private List<OptionServiceAbonnement> optionServiceAbonnement = new ArrayList<>();
 }
