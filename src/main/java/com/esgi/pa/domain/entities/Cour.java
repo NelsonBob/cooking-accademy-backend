@@ -2,6 +2,7 @@ package com.esgi.pa.domain.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -53,6 +54,10 @@ public class Cour {
   private Intern creator;
 
   @Builder.Default
-  @OneToMany(mappedBy = "cour", fetch = FetchType.LAZY)
+  @OneToMany(
+    mappedBy = "cour",
+    fetch = FetchType.LAZY,
+    cascade = CascadeType.REMOVE
+  )
   private List<CourAbonnement> courAbonnements = new ArrayList<>();
 }

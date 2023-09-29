@@ -1,5 +1,6 @@
 package com.esgi.pa.domain.services;
 
+import com.esgi.pa.api.mappers.ServiceAbonnementMapper;
 import com.esgi.pa.domain.entities.Client;
 import com.esgi.pa.domain.entities.Intern;
 import com.esgi.pa.domain.entities.ServiceAbonnement;
@@ -134,6 +135,11 @@ public class AuthService {
             "Client not found with email : " + email
           )
         );
+      if (users.getServiceAbonnement() == null) {
+        Optional<ServiceAbonnement> service = serviceAbonnementService.existDefault();
+        users.setServiceAbonnement(service.get());
+        usersRepository.save(users);
+      }
       return jwtService.generateToken(
         Map.of(
           "id",
@@ -145,7 +151,13 @@ public class AuthService {
           "picture",
           users.getImgPath() != null ? users.getImgPath() : "",
           "adress",
-          client.getAdress()
+          client.getAdress(),
+          "subscription",
+          ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(
+            users.getServiceAbonnement() == null
+              ? new ServiceAbonnement()
+              : users.getServiceAbonnement()
+          )
         ),
         users
       );
@@ -169,7 +181,13 @@ public class AuthService {
           "picture",
           users.getImgPath() != null ? users.getImgPath() : "",
           "fonction",
-          intern.getFonction()
+          intern.getFonction(),
+          "subscription",
+          ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(
+            users.getServiceAbonnement() == null
+              ? new ServiceAbonnement()
+              : users.getServiceAbonnement()
+          )
         ),
         users
       );

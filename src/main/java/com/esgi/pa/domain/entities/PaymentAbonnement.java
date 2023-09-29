@@ -32,7 +32,7 @@ public class PaymentAbonnement {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  private double amount;
+  private Double amount;
 
   @ManyToOne
   @JoinColumn(name = "creator_id", referencedColumnName = "id")

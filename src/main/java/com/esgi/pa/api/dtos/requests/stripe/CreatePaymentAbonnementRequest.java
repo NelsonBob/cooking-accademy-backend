@@ -12,7 +12,7 @@ import lombok.Builder;
 @Builder
 @JsonAutoDetect(fieldVisibility = ANY)
 public record CreatePaymentAbonnementRequest(
-    @NotNull(message = "amount is required") double amount,
+    @NotNull(message = "amount is required") Double amount,
     @NotNull(message = "typeAbonnement is required") TypeAbonnement typeAbonnement,
     @NotNull(message = "id service is required") Long service) {
 }

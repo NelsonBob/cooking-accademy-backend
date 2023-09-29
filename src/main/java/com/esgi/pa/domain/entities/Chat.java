@@ -3,6 +3,7 @@ package com.esgi.pa.domain.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,7 +38,8 @@ public class Chat {
     @JoinColumn(name = "cour_id")
     private Cour cour;
 
-    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY,
+    cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<Message> messages = new ArrayList<>();
 

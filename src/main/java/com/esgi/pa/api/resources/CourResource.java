@@ -162,11 +162,9 @@ public class CourResource {
   ) throws TechnicalNotFoundException {
     Users users = userService.getById(id);
     Cour cour = courService.getById(idk);
-    return CourMapper.toGetPermissionCourResponse(
-      courAbonnementService.countCourAbonnementByUserAndCourAndDayDate(
-        users,
-        cour
-      )
+    return courAbonnementService.countCourAbonnementByUserAndCourAndDayDate(
+      users,
+      cour
     );
   }
 }

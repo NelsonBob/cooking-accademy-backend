@@ -30,8 +30,4 @@ public interface CourMapper {
       .distinct()
       .toList();
   }
-
-  static Boolean toGetPermissionCourResponse(Boolean boolean1) {
-    return boolean1;
-  }
 }

@@ -50,12 +50,14 @@ public class PaymentAbonnementService {
       .append("Abonnement: ")
       .append(paymentRequest.amount() + " " + paymentRequest.typeAbonnement())
       .append("\n\n");
+
     saveReceiptToPdf(
       receiptContent.toString(),
       paymentRequest,
       users,
       serviceAbonnement
     );
+
     receiptContent.setLength(0);
   }
 
@@ -118,20 +120,23 @@ public class PaymentAbonnementService {
   @Transactional
   public void create(
     Users users,
-    double amount,
+    Double amount,
     TypeAbonnement typeAbonnement,
     String fileName,
     ServiceAbonnement serviceAbonnement
   ) throws TechnicalFoundException {
+    System.out.println("servservservservserviceAbonnement");
     paymentAbonnementRepository.save(
       PaymentAbonnement
         .builder()
         .amount(amount)
         .receiptPath(fileName)
+        .typeAbonnement(typeAbonnement)
         .users(users)
         .paymentDate(new Date())
         .build()
     );
+    System.out.println("fffffileName");
 
     users.setServiceAbonnement(serviceAbonnement);
     users.setDateSuscription(new Date());
