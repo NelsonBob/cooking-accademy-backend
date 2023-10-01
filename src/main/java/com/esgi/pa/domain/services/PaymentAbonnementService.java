@@ -125,7 +125,6 @@ public class PaymentAbonnementService {
     String fileName,
     ServiceAbonnement serviceAbonnement
   ) throws TechnicalFoundException {
-    System.out.println("servservservservserviceAbonnement");
     paymentAbonnementRepository.save(
       PaymentAbonnement
         .builder()
@@ -136,8 +135,6 @@ public class PaymentAbonnementService {
         .paymentDate(new Date())
         .build()
     );
-    System.out.println("fffffileName");
-
     users.setServiceAbonnement(serviceAbonnement);
     users.setDateSuscription(new Date());
     users.setDateExpiration(userService.dateSubscription(typeAbonnement));
