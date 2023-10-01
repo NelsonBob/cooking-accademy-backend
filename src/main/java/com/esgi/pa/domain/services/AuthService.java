@@ -153,8 +153,8 @@ public class AuthService {
           "adress",
           client.getAdress(),
           "subscription",
-          ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(
-            users.getServiceAbonnement() == null
+          ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(        
+            users.getServiceAbonnement() == null 
               ? new ServiceAbonnement()
               : users.getServiceAbonnement()
           )
