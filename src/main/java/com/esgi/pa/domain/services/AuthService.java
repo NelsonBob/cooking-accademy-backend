@@ -91,7 +91,13 @@ public class AuthService {
           "role",
           users.getRole(),
           "adress",
-          adress
+          adress,
+          "subscription",
+          ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(
+            users.getServiceAbonnement() == null
+              ? new ServiceAbonnement()
+              : users.getServiceAbonnement()
+          )
         ),
         users
       );
@@ -153,8 +159,8 @@ public class AuthService {
           "adress",
           client.getAdress(),
           "subscription",
-          ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(        
-            users.getServiceAbonnement() == null 
+          ServiceAbonnementMapper.toGetServiceAbonnementUserResponse(
+            users.getServiceAbonnement() == null
               ? new ServiceAbonnement()
               : users.getServiceAbonnement()
           )
